@@ -1,11 +1,12 @@
 package com.example.myweathernow;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
+import android.content.Intent;
 import android.os.Bundle;
+import com.example.myweathernow.background_check.LocationCheckerService;
 
 public class MWNhome extends Activity {
     /**
@@ -15,31 +16,17 @@ public class MWNhome extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        System.out.print("sono nella main activity");
+        // Set the alarm here.
+        AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, LocationCheckerService.class);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        // ripete l'operazione ogni 10 secondi (dopo allunghiamo i tempi)
+        alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                10000,
+                10000, alarmIntent);
 
-        Location last = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-        System.out.println(last.getLatitude());
-        System.out.println(last.getLongitude());
 
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                System.out.println("NUOVA LOCATION");
-                System.out.println(location.getLatitude());
-                System.out.println(location.getLongitude());
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
-
-            public void onProviderEnabled(String provider) {}
-
-            public void onProviderDisabled(String provider) {}
-        };
-
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, locationListener);
     }
 }
