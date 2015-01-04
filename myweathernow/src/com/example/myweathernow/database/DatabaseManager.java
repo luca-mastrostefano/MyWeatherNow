@@ -5,17 +5,11 @@ package com.example.myweathernow.database;
  */
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import com.example.myweathernow.Meteo;
 
 public class DatabaseManager extends SQLiteOpenHelper {
 
@@ -159,7 +153,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return site;
     }
 
-    private ContentValues createValuesFromMeteo(final Meteo meteo) {
+    private ContentValues createValuesFromMeteo(final MeteoInfo meteo) {
         final ContentValues values = new ContentValues();
         values.put(DatabaseManager.KEY_PAGE_NAME, site.getPageName());
         values.put(DatabaseManager.KEY_URL, site.getUrl());

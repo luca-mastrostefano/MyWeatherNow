@@ -2,10 +2,8 @@ package com.example.myweathernow.background_check;
 
 import android.app.*;
 import android.content.*;
-import android.location.*;
-import android.os.*;
 import android.util.*;
-import com.example.myweathernow.Meteo;
+import com.example.myweathernow.MeteoInfo;
 
 /**
  * Created by ele on 03/01/15.
@@ -22,7 +20,7 @@ public class SynchService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         Log.i("location check service", "inizio le op di update");
 
-        Meteo meteo = new APIManager(this.getApplicationContext()).getMeteoInfo();
+        MeteoInfo meteo = new APIManager(this.getApplicationContext()).getMeteoInfo();
         //store meteo
         //
         //if(location == da mostrare){
