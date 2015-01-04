@@ -1,23 +1,17 @@
-#### register
-
-request type: POST
-
-parameters:
-    - email: string [required]
-    - username: string [optional]
-
-response: JSON
-    - status: int, http response code
-    - id : int, unique id
-
 #### get
 forecast data for Rome
 
 request type: GET
 
-parameters: none
+parameters:
+    - id: int [optional] if missing, registration is performed.
 
 response: JSON
     - status: int, http response code
     - data : array
-        - response: string, sentence in natural language
+        - forecast: array
+            - temperature: float, Kelvin scale
+            - humidity : int, percent scale
+            - wind: float, meters/seconds
+        - sentence: string, sentence in natural language
+        - id: the user ID
