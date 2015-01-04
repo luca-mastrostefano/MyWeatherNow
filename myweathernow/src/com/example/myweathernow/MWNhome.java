@@ -1,13 +1,10 @@
 package com.example.myweathernow;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.Log;
-import com.example.myweathernow.background_check.LocationBootReceiver;
+import android.app.*;
+import android.content.*;
+import android.os.*;
+import android.util.*;
+import com.example.myweathernow.background_check.*;
 
 public class MWNhome extends Activity {
     /**
@@ -19,16 +16,18 @@ public class MWNhome extends Activity {
         setContentView(R.layout.main);
         Log.i("MWN", "sono nella main activity");
 
-//        Set the alarm here.
+        //Set the alarm here.
         AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 
-        Intent intent = new Intent(this, LocationBootReceiver.class);
+        Intent intent = new Intent(this, AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         // ripete l'operazione ogni 10 secondi (dopo allunghiamo i tempi)
         alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 10000,
                 10000, alarmIntent);
+
+        Log.i("MWN", "settato alarm manager");
     }
 }
 
