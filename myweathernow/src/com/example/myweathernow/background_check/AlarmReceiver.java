@@ -2,9 +2,7 @@ package com.example.myweathernow.background_check;
 
 /**
  * Created by ele on 03/01/15.
- * Riceve la notifica di boot completo all'accensione del telefono
- * e setta un alarm manager che ogni tot minuti controlla se la
- * location dell'utente è cambiata
+ * Riceve i tik dall'alarm manager e setta l'alarm la prima volta
  */
 
 import android.app.AlarmManager;
@@ -29,8 +27,8 @@ public class AlarmReceiver extends BroadcastReceiver {
         Intent intent = new Intent(context, AlarmReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // ripete l'operazione ogni 10 secondi (dopo allunghiamo i tempi)
-        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-                System.currentTimeMillis(), DELAY_ms, alarmIntent);
+        alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                DELAY_ms, DELAY_ms, alarmIntent);
         Log.i("boot receiver", "settato alarm manager");
     }
 }
