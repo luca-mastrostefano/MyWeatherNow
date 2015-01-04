@@ -28,14 +28,18 @@ public class SynchService extends IntentService {
         }catch(Exception e){
 
         }
-        //store meteo
+        //Meteo meteo = new APIManager(this.getApplicationContext()).getMeteoInfo();
         //
         //if(location == da mostrare){
         //      aggiorna e attiva notifica
         // }else{
         //      disattiva notifica
         // }
-        new LocationsDetector().detect(this);
 
+        // solo per testare
+        new LocationsDetector().detect(this);
+        NotificationHandler handler = new NotificationHandler(this.getApplicationContext(), 1);
+        handler.show("Notifica creata");
+        handler.update("Notifica aggiornata");
     }
 }

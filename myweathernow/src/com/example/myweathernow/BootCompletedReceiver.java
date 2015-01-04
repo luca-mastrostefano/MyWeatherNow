@@ -3,14 +3,12 @@ package com.example.myweathernow;
 /**
  * Created by ele on 03/01/15.
  * Riceve la notifica di boot completo all'accensione del telefono
- * e setta un alarm manager che ogni tot minuti controlla se la
- * location dell'utente è cambiata
+ * e setta un alarm manager
  */
 
-import android.app.*;
 import android.content.*;
 import android.util.*;
-import com.example.myweathernow.background_check.AlarmReceiver;
+import com.example.myweathernow.background_check.*;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
