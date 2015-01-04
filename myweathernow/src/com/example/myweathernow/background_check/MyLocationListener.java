@@ -10,6 +10,7 @@ import android.location.LocationListener;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationCompat.Builder;
+import android.util.Log;
 import com.example.myweathernow.MWNhome;
 import com.example.myweathernow.R;
 
@@ -56,9 +57,9 @@ public class MyLocationListener implements LocationListener{
 
 
         // Called when a new location is found by the network location provider.
-        System.out.println("NUOVA LOCATION");
-        System.out.println(location.getLatitude());
-        System.out.println(location.getLongitude());
+        Log.i("Listener", "NUOVA LOCATION");
+        Log.i("Listener", "" +location.getLatitude());
+        Log.i("Listener", "" + location.getLongitude());
     }
 
     public void onStatusChanged(String provider, int status, Bundle extras) {}

@@ -6,7 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import com.example.myweathernow.background_check.LocationCheckerService;
+import android.util.Log;
+import com.example.myweathernow.background_check.LocationBootReceiver;
 
 public class MWNhome extends Activity {
     /**
@@ -16,17 +17,18 @@ public class MWNhome extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        System.out.print("sono nella main activity");
-        // Set the alarm here.
+        Log.i("MWN", "sono nella main activity");
+
+//        Set the alarm here.
         AlarmManager alarmMgr = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, LocationCheckerService.class);
+
+        Intent intent = new Intent(this, LocationBootReceiver.class);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
 
         // ripete l'operazione ogni 10 secondi (dopo allunghiamo i tempi)
         alarmMgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
                 10000,
                 10000, alarmIntent);
-
-
     }
 }
+
