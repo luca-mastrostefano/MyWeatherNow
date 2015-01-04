@@ -38,7 +38,7 @@ public class SynchService extends IntentService {
 
         // solo per testare
         new LocationsDetector().detect(this);
-        NotificationHandler handler = new NotificationHandler(this.getApplicationContext(), 1);
+        NotificationHandler handler = new NotificationHandler(this.getApplicationContext());
         handler.show("Notifica creata");
         handler.update("Notifica aggiornata");
     }
