@@ -49,7 +49,7 @@ public class SynchService extends IntentService implements LocationListener {
         // }
 
         // solo per testare
-        new LocationsDetector().detect(this);
+        new LocationsDetector().addLocationToHistory(currentLocation);
         NotificationHandler handler = new NotificationHandler(this.getApplicationContext());
         handler.show("Notifica creata");
         handler.update("Notifica aggiornata");
