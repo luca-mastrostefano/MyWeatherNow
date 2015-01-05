@@ -9,13 +9,12 @@ import com.example.myweathernow.*;
  * Created by lucamastrostefano on 04/01/15.
  */
 public class NotificationHandler {
-    private int notificationID; // l'id dell'utente?
+    private int notificationID = 1;
     private Context c;
     private NotificationCompat.Builder mBuilder;
     private NotificationManager mNotificationManager;
 
-    public NotificationHandler(Context c, int notificationID) {
-        this.notificationID = notificationID;
+    public NotificationHandler(Context c) {
         this.c = c;
         this.mBuilder = new NotificationCompat.Builder(this.c);
         this.mNotificationManager =
