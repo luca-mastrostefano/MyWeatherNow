@@ -12,6 +12,8 @@ class Forecast {
 
     private $id;
 
+    private $con;
+
     private $response;
 
     public function __construct() {
@@ -29,6 +31,8 @@ class Forecast {
             $this->id = $response[ 'id' ];
         }
 
+        $this->con = Connection::getInstance()->getCon();
+
         $this->response = array(
             "status" => 200,
             "data" => array(
@@ -45,20 +49,65 @@ class Forecast {
 
     public function doAction(){
 
-        $forecastData = file_get_contents('http://api.openweathermap.org/data/2.5/weather?q=Rome,it');
-        $forecastData = json_decode( $forecastData, true );
-        if($forecastData == null){
-            $this->response['status'] = 500;
-            return;
-        }
-        $temperature = $forecastData['main']['temp'];
-        $humidity = $forecastData['main']['humidity'];
-        $wind = $forecastData['wind']['speed'];
+        $cachedForecast                                             = $this->getForecastFromCache();
+        $cache_hit                                                  = false;
+        if ( 0 && count( $cachedForecast ) > 0 ) {
+            $cache_hit    = true;
+            $forecastData = $cachedForecast[ 0 ];
 
+            $temperature = $forecastData[ 'temperature' ];
+            $humidity    = $forecastData[ 'humidity' ];
+            $wind        = $forecastData[ 'wind' ];
+            $wind_dir    = $forecastData[ 'w_dir' ];
+        } else {
+            $forecastData = file_get_contents( 'http://api.openweathermap.org/data/2.5/weather?q=Rome,it&lang=it' );
+            $forecastData = json_decode( $forecastData, true );
+            if ( $forecastData == null ) {
+                $this->response[ 'status' ] = 500;
+
+                return;
+            }
+            $temperature = $forecastData[ 'main' ][ 'temp' ];
+            $humidity    = $forecastData[ 'main' ][ 'humidity' ];
+            $wind        = $forecastData[ 'wind' ][ 'speed' ];
+            $wind_dir    = $forecastData[ 'wind' ][ 'deg' ];
+            usleep( 1 );
+        }
 
         $this->response['data']['forecast']['temperature'] = $temperature;
         $this->response['data']['forecast']['humidity'] = $humidity;
         $this->response['data']['forecast']['wind'] = $wind;
+        $this->response[ 'data' ][ 'forecast' ][ 'wind_direction' ] = $wind;
+
+        if ( !$cache_hit ) {
+            $this->storeForecastData( array( 'city' => "Rome", 'temp' => $temperature, 'hum' => $humidity,
+                                             'wind' => $wind, 'w_dir' => 0, 'rain' => 0 ) );
+        }
+    }
+
+    private function getForecastFromCache() {
+        $stmt = $this->con->prepare( "select * from forecasts
+                          where date between date_sub(now(), interval 5 minute ) and now()" );
+
+        try {
+            $stmt->execute();
+            $result = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+
+        } catch ( \PDOException $e ) {
+            return array();
+        }
+
+        return $result;
+    }
+
+    private function storeForecastData( Array $forecast_data ) {
+        $stmt = $this->con->prepare( "insert into forecasts (city, temperature, humidity, wind, wind_dir, rain)
+                  values (:city, :temp, :hum, :wind, :w_dir, :rain)
+        " );
+
+        $stmt->execute( array( ":city" => $forecast_data[ 'city' ], ":temp" => $forecast_data[ 'temp' ],
+                               ":hum" => $forecast_data[ 'hum' ], ":wind" => $forecast_data[ 'wind' ],
+                               ":w_dir" => $forecast_data[ 'w_dir' ], ":rain" => $forecast_data[ 'rain' ] ) );
     }
 
     /**

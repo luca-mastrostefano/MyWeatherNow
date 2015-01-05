@@ -10,4 +10,4 @@ include "core/Autoloader.php";
 
 $forecast = new \core\Forecast();
 $forecast->doAction();
-echo json_encode( $forecast->getResponse());
+echo json_encode( $forecast->getResponse() );
