@@ -4,12 +4,15 @@ package com.example.myweathernow.persistency;
  * Created by lucamastrostefano on 04/01/15.
  */
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import android.content.*;
+import android.database.*;
+import android.database.sqlite.*;
+import android.location.*;
+import com.example.myweathernow.*;
+import com.example.myweathernow.exception.*;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import java.text.*;
+import java.util.*;
 
 public class DatabaseManager extends SQLiteOpenHelper {
 
@@ -18,19 +21,15 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "MyWeatherNow";
-    private static final String TABLE_SITES_NAME = "weather";
+    private static final String TABLE_LOCATION_NAME = "MWN_location";
     private static final String NULL_VALUE = "null";
 
-    private static final String KEY_ID = "id";
-    private static final String KEY_PAGE_NAME = "page_name";
-    private static final String KEY_URL = "url";
-    private static final String KEY_SELECTOR = "selector";
-    private static final String KEY_HASH = "hash";
-    private static final String KEY_RUNNING_STATUS = "running_status";
-    private static final String KEY_SITE_STATUS = "site_status";
-    private static final String KEY_CREATION_DATE = "creation_date";
-    private static final String KEY_LAST_CHECK = "last_check";
-    private static final String KEY_SERVER_SYNCH = "server_synch";
+    // campi della tabella MWN_location
+    private static final String KEY_ID = "loc_id";
+    private static final String KEY_LATITUDE = "loc_latitude";
+    private static final String KEY_LONGITUDE = "loc_longitude";
+    private static final String KEY_TIMESTAMP = "loc_timestamp";
+    private static final String KEY_PING = "loc_ping_number";
 
     public static DatabaseManager getInstance(final Context context) {
         if (DatabaseManager.instance == null) {
@@ -44,22 +43,26 @@ public class DatabaseManager extends SQLiteOpenHelper {
         this.dateFormatter = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
     }
 
-    // Creating Tables
+    // Creating Tables - called when Db is created for first time
     @Override
     public void onCreate(final SQLiteDatabase db) {
-        final String CREATE_SITES_TABLE = "CREATE TABLE " + DatabaseManager.TABLE_SITES_NAME + "(" + DatabaseManager.KEY_ID
-                + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," + DatabaseManager.KEY_SELECTOR + " TEXT," + DatabaseManager.KEY_PAGE_NAME + " TEXT,"
-                + DatabaseManager.KEY_HASH + " TEXT," + DatabaseManager.KEY_URL + " TEXT," + DatabaseManager.KEY_RUNNING_STATUS + " TEXT,"
-                + DatabaseManager.KEY_SITE_STATUS + " TEXT," + DatabaseManager.KEY_CREATION_DATE + " TEXT," + DatabaseManager.KEY_LAST_CHECK
-                + " TEXT," + DatabaseManager.KEY_SERVER_SYNCH + " TEXT)";
-        db.execSQL(CREATE_SITES_TABLE);
+        // tabella location
+        final String CREATE_LOCATION_TABLE =
+                "CREATE TABLE " + DatabaseManager.TABLE_LOCATION_NAME + "(" +
+                        DatabaseManager.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                        DatabaseManager.KEY_LATITUDE + " REAL," +
+                        DatabaseManager.KEY_LONGITUDE + " REAL," +
+                        DatabaseManager.KEY_TIMESTAMP + " TEXT," +
+                        DatabaseManager.KEY_PING + " INTEGER)";
+
+        db.execSQL(CREATE_LOCATION_TABLE);
     }
 
     // Upgrading database
     @Override
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         // Drop older table if existed
-        db.execSQL("DROP TABLE IF EXISTS " + DatabaseManager.TABLE_SITES_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DatabaseManager.TABLE_LOCATION_NAME);
 
         // Create tables again
         this.onCreate(db);
@@ -68,37 +71,37 @@ public class DatabaseManager extends SQLiteOpenHelper {
     /**
      * All CRUD(Create, Read, Update, Delete) Operations
      */
-/*
-    // Store a site
-    public long createSite(final Site site) {
+
+    // Store a location
+    public long addLocation(final MWNlocation location) {
         final SQLiteDatabase db = this.getWritableDatabase();
 
-        final ContentValues values = this.createValuesFromSite(site);
+        final ContentValues values = this.createValuesFromLocation(location);
         // Inserting Row
-        final long newID = db.insert(DatabaseManager.TABLE_SITES_NAME, null, values);
+        final long newID = db.insert(DatabaseManager.TABLE_LOCATION_NAME, null, values);
         // db.close(); // Closing database connection
         return newID;
     }
 
-    // Getting single site
-    public Site getSite(final long id) {
+    // Getting single location by id
+    public MWNlocation getLocation(final long id) {
         final SQLiteDatabase db = this.getReadableDatabase();
 
-        final String[] fields = new String[]{DatabaseManager.KEY_ID, DatabaseManager.KEY_PAGE_NAME, DatabaseManager.KEY_URL,
-                DatabaseManager.KEY_SELECTOR, DatabaseManager.KEY_HASH, DatabaseManager.KEY_RUNNING_STATUS, DatabaseManager.KEY_SITE_STATUS,
-                DatabaseManager.KEY_CREATION_DATE, DatabaseManager.KEY_LAST_CHECK, DatabaseManager.KEY_SERVER_SYNCH};
-        final Cursor cursor = db.query(DatabaseManager.TABLE_SITES_NAME, fields, DatabaseManager.KEY_ID + "=?", new String[]{String.valueOf(id)},
+        final String[] fields = new String[]{DatabaseManager.KEY_ID, DatabaseManager.KEY_LATITUDE, DatabaseManager.KEY_LONGITUDE,
+                DatabaseManager.KEY_TIMESTAMP, DatabaseManager.KEY_PING};
+        final Cursor cursor = db.query(DatabaseManager.TABLE_LOCATION_NAME, fields, DatabaseManager.KEY_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
         }
-        return this.createSiteFromResult(cursor);
+        return this.createLocationFromResult(cursor);
     }
 
-    // Getting All Sites
-    public List<Site> getAllSites() {
-        final List<Site> siteList = new ArrayList<Site>();
-        final String selectQuery = "SELECT * FROM " + DatabaseManager.TABLE_SITES_NAME + " ORDER BY " + DatabaseManager.KEY_ID + " DESC";
+    // Getting All Location
+    public List<MWNlocation> getAllLocation() {
+        final List<MWNlocation> locationList = new ArrayList<MWNlocation>();
+        // prende le location ordinate per ping decrescenti
+        final String selectQuery = "SELECT * FROM " + DatabaseManager.TABLE_LOCATION_NAME + " ORDER BY " + DatabaseManager.KEY_PING + " DESC";
 
         final SQLiteDatabase db = this.getWritableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
@@ -106,69 +109,105 @@ public class DatabaseManager extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                final Site site = this.createSiteFromResult(cursor);
-                siteList.add(site);
+                final MWNlocation location = this.createLocationFromResult(cursor);
+                locationList.add(location);
             } while (cursor.moveToNext());
         }
 
-        return siteList;
+        return locationList;
     }
 
-    // Updating single site
-    public int updateSite(final Site site) throws SiteNotStoredException {
+    // Getting All Location with a ping number grater than a certain value
+    public List<MWNlocation> getAllLocationByPingNumber(int ping) {
+        final List<MWNlocation> locationList = new ArrayList<MWNlocation>();
+        // prende le location ordinate per ping decrescenti
+        final String selectQuery = "SELECT * FROM " + DatabaseManager.TABLE_LOCATION_NAME + " WHERE loc_ping_number >= " + ping + "ORDER BY " + DatabaseManager.KEY_PING + " DESC";
+
         final SQLiteDatabase db = this.getWritableDatabase();
+        final Cursor cursor = db.rawQuery(selectQuery, null);
 
-        final ContentValues values = this.createValuesFromSite(site);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                final MWNlocation location = this.createLocationFromResult(cursor);
+                locationList.add(location);
+            } while (cursor.moveToNext());
+        }
 
-        return db.update(DatabaseManager.TABLE_SITES_NAME, values, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(site.getId())});
+        return locationList;
     }
 
-    // Deleting single site
-    public void deleteSites(final Site site) throws SiteNotStoredException {
+    // Updating single location -  aggiorna la location dall'id
+    public int updateLocation(final MWNlocation mwNlocation) throws LocationNotStoredException {
         final SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DatabaseManager.TABLE_SITES_NAME, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(site.getId())});
+
+        final ContentValues values = this.createValuesFromLocation(mwNlocation);
+
+        return db.update(DatabaseManager.TABLE_LOCATION_NAME, values, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(mwNlocation.getId())});
+    }
+
+    // Deleting single location - cancella la location con l'id
+    public void deleteLocation(final MWNlocation mwNlocation) throws LocationNotStoredException {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(DatabaseManager.TABLE_LOCATION_NAME, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(mwNlocation.getId())});
         // db.close();
     }
 
-    private Site createSiteFromResult(final Cursor cursor) {
-        final Site site = new Site();
-        try {
-            site.setId(cursor.getLong(cursor.getColumnIndex(DatabaseManager.KEY_ID)));
-            site.setPageName(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_PAGE_NAME)));
-            site.setUrl(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_URL)));
-            site.setSelector(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_SELECTOR)));
-            site.setHash(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_HASH)));
-            site.setRunningStatus(Site.RunningStatus.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_RUNNING_STATUS))));
-            site.setSiteStatus(Site.SiteStatus.valueOf(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_SITE_STATUS))));
-            site.setCreationDate(this.dateFormatter.parse(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_CREATION_DATE))));
-            final String lastCheck = cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_LAST_CHECK));
-            if ((lastCheck == null) || lastCheck.equals(DatabaseManager.NULL_VALUE)) {
-                site.setLastCheck(null);
-            } else {
-                site.setLastCheck(this.dateFormatter.parse(lastCheck));
-            }
-            site.setServerSynch(Boolean.parseBoolean(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_SERVER_SYNCH))));
-        } catch (final ParseException e) {
-        }
-        return site;
+    // Deleting all location with ping number lesser than a certain value
+    public void deleteLocationByPingNumber(final int ping) throws LocationNotStoredException {
+        final SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(DatabaseManager.TABLE_LOCATION_NAME, DatabaseManager.KEY_PING + " >= ?", new String[]{String.valueOf(ping)});
+        // db.close();
     }
 
-    private ContentValues createValuesFromMeteo(final MeteoInfo meteo) {
-        final ContentValues values = new ContentValues();
-        values.put(DatabaseManager.KEY_PAGE_NAME, site.getPageName());
-        values.put(DatabaseManager.KEY_URL, site.getUrl());
-        values.put(DatabaseManager.KEY_SELECTOR, site.getSelector());
-        values.put(DatabaseManager.KEY_HASH, site.getHash());
-        values.put(DatabaseManager.KEY_RUNNING_STATUS, site.getRunningStatus().toString());
-        values.put(DatabaseManager.KEY_SITE_STATUS, site.getSiteStatus().toString());
-        values.put(DatabaseManager.KEY_CREATION_DATE, this.dateFormatter.format(site.getCreationDate()));
-        if (site.getLastCheck() != null) {
-            values.put(DatabaseManager.KEY_LAST_CHECK, this.dateFormatter.format(site.getLastCheck()));
-        } else {
-            values.put(DatabaseManager.KEY_LAST_CHECK, DatabaseManager.NULL_VALUE);
+    // dato il risultato del db, crea un oggetto location
+    private MWNlocation createLocationFromResult(final Cursor cursor) {
+        final MWNlocation mwn_location = new MWNlocation();
+        try {
+            double latitude = cursor.getDouble(cursor.getColumnIndex(DatabaseManager.KEY_LATITUDE));
+            double longitude = cursor.getDouble(cursor.getColumnIndex(DatabaseManager.KEY_LONGITUDE));
+            Date date = this.dateFormatter.parse(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_TIMESTAMP)));
+            long time = date.getTime();
+
+            Location loc = new Location(LocationManager.NETWORK_PROVIDER);
+            loc.setLatitude(latitude);
+            loc.setLongitude(longitude);
+            loc.setTime(time);
+
+            mwn_location.setId(cursor.getInt(cursor.getColumnIndex(DatabaseManager.KEY_ID)));
+            mwn_location.setLocation(loc);
+            mwn_location.setPing(cursor.getInt(cursor.getColumnIndex(DatabaseManager.KEY_PING)));
+        } catch (final ParseException e) {
         }
-        values.put(DatabaseManager.KEY_SERVER_SYNCH, Boolean.toString(site.isServerSynch()));
+        return mwn_location;
+    }
+
+    // data una location, crea i dati da inserire nel db
+    private ContentValues createValuesFromLocation(final MWNlocation loc) {
+        final ContentValues values = new ContentValues();
+        values.put(DatabaseManager.KEY_LATITUDE, String.valueOf(loc.getLocation().getLatitude()));
+        values.put(DatabaseManager.KEY_LONGITUDE, String.valueOf(loc.getLocation().getLongitude()));
+        values.put(DatabaseManager.KEY_TIMESTAMP, this.dateFormatter.format(loc.getTimestamp()));
+        values.put(DatabaseManager.KEY_PING, loc.getPing());
         return values;
     }
-*/
+
+    //    private ContentValues createValuesFromMeteo(final MeteoInfo meteo) {
+//        final ContentValues values = new ContentValues();
+//        values.put(DatabaseManager.KEY_LATITUDE, site.getPageName());
+//        values.put(DatabaseManager.KEY_URL, site.getUrl());
+//        values.put(DatabaseManager.KEY_SELECTOR, site.getSelector());
+//        values.put(DatabaseManager.KEY_HASH, site.getHash());
+//        values.put(DatabaseManager.KEY_RUNNING_STATUS, site.getRunningStatus().toString());
+//        values.put(DatabaseManager.KEY_SITE_STATUS, site.getSiteStatus().toString());
+//        values.put(DatabaseManager.KEY_CREATION_DATE, this.dateFormatter.format(site.getCreationDate()));
+//        if (site.getLastCheck() != null) {
+//            values.put(DatabaseManager.KEY_LAST_CHECK, this.dateFormatter.format(site.getLastCheck()));
+//        } else {
+//            values.put(DatabaseManager.KEY_LAST_CHECK, DatabaseManager.NULL_VALUE);
+//        }
+//        values.put(DatabaseManager.KEY_SERVER_SYNCH, Boolean.toString(site.isServerSynch()));
+//        return values;
+//    }
+
 }
