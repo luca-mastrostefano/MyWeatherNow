@@ -1,4 +1,4 @@
-package com.example.myweathernow.database;
+package com.example.myweathernow.persistency;
 
 /**
  * Created by lucamastrostefano on 04/01/15.
@@ -18,7 +18,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "MyWeatherNow";
-    private static final String TABLE_SITES_NAME = "sites";
+    private static final String TABLE_SITES_NAME = "weather";
     private static final String NULL_VALUE = "null";
 
     private static final String KEY_ID = "id";

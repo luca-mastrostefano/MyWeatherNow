@@ -20,15 +20,12 @@ public class SynchService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.i("location check service", "inizio le op di update");
-
-
         Location currentLocation = null;
         try {
-            MeteoInfo meteo = new APIManager(this.getApplicationContext()).getMeteoInfo(currentLocation);
+            MeteoInfo meteo = new APIManager().getMeteoInfo(this.getApplicationContext(), currentLocation);
         }catch(Exception e){
 
         }
-        //Meteo meteo = new APIManager(this.getApplicationContext()).getMeteoInfo();
         //
         //if(location == da mostrare){
         //      aggiorna e attiva notifica
