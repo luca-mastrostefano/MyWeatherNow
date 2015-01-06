@@ -13,7 +13,7 @@ import com.example.myweathernow.background_check.*;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public final static int DELAY_ms = 10000;
+    public final static int DELAY_ms = 1000 * 60 * 10;
 
     @Override
     public void onReceive(Context context, Intent bootIntent) {

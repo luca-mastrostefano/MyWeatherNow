@@ -14,10 +14,12 @@ import com.example.myweathernow.*;
 
 public class SynchService extends IntentService implements LocationListener {
     private LocationsDetector locDetector;
+    private NotificationHandler notificationHand;
 
     public SynchService() {
         super("SynchService");
-        this.locDetector = new LocationsDetector(this);
+        this.locDetector = new LocationsDetector(this.getApplicationContext());
+        this.notificationHand = new NotificationHandler(this.getApplicationContext());
     }
 
     @Override
@@ -34,24 +36,18 @@ public class SynchService extends IntentService implements LocationListener {
     public void onLocationChanged(Location currentLocation) {
         Log.i("location service", "Latitude: " + currentLocation.getLatitude());
         Log.i("location service", "Logitude: " + currentLocation.getLongitude());
-
         try {
-            // prendo le notizie del meteo
             MeteoInfo meteo = new APIManager().getMeteoInfo(this.getApplicationContext(), currentLocation);
         }catch(Exception e){
 
         }
         boolean showNotification = this.locDetector.addLocationToHistory(currentLocation);
         if(showNotification){
-            //TODO  aggiorna e attiva notifica
+            notificationHand.show("Notifica Creata/Aggiornata");
         } else{
-            //TODO disattiva notifica
+            notificationHand.hide();
         }
 
-
-        NotificationHandler handler = new NotificationHandler(this.getApplicationContext());
-        handler.show("Notifica creata");
-        handler.update("Notifica aggiornata");
     }
 
     @Override

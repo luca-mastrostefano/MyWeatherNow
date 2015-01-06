@@ -23,17 +23,7 @@ public class NotificationHandler {
 
     public void show(String notification) {
         mBuilder.setSmallIcon(R.drawable.weather_sample);
-        mBuilder.setContentTitle("MyWeatherNow Notification");
         mBuilder.setContentText(notification);
-        mNotificationManager.notify(notificationID, mBuilder.build());
-    }
-
-    public void update(String notification) {
-        mBuilder.setContentTitle("MyWeatherNow Notification");
-        mBuilder.setContentText(notification);
-        mBuilder.setSmallIcon(R.drawable.weather_sample);
-        // Because the ID remains unchanged, the existing notification is
-        // updated.
         mNotificationManager.notify(notificationID, mBuilder.build());
     }
 

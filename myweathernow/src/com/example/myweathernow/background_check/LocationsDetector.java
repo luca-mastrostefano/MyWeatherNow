@@ -15,11 +15,11 @@ public class LocationsDetector {
     }
 
     public boolean addLocationToHistory(Location currentLocation) {
+        boolean showNotification = false;
         // first time
         if (!this.tempLoc.hasLocation()) {
             this.tempLoc.addLocation(currentLocation);
-            // TODO se è la prima volta mostro subito la notifica ? e se si sta spostando?
-            return true;
+            showNotification = true;
         } else {
             Location oldLoc = this.tempLoc.getOldLocation();
             // due location sono diverse se distanti più di 200m
@@ -27,31 +27,32 @@ public class LocationsDetector {
                 // controllo quanto valeva l'ultimo ping
                 int oldPing = this.tempLoc.getOldPing();
                 if (oldPing >= 6) {
-                    // TODO leva la notifica
-                    return false;
+                    showNotification = false;
                 }
                 // salvo l'ultima come corrente
                 this.tempLoc.addLocation(currentLocation);
-
             } else {
                 // distanza < 200m, approssimiamo a stessa location
                 // aggiorno quella di prima aumentando il ping
                 int updatedPing = this.tempLoc.updateLocation();
                 if (updatedPing >= 6) {
-                    //TODO mostro la notifica
-                    return true;
+                    showNotification = true;
+                    // TODO se ping >= 6 aggiungo al db come location importante
                 }
             }
 
         }
-        return false;
+        return showNotification;
     }
 
-    public boolean isHome(Location currentLocation){
+    //TODO controllare il cambioo di location, se quando cambia va in una location conosciuta
+    //mostrola notifica (tipo quando entro a casa)
+
+    public boolean isHome(Location currentLocation) {
         return true;
     }
 
-    public boolean isResting(Location currentLocation){
+    public boolean isResting(Location currentLocation) {
         return false;
     }
 }
