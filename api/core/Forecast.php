@@ -17,7 +17,7 @@ class Forecast
 
     private $response;
 
-    const TABLE_PREFIX = "";//"myweathernow_";
+    const TABLE_PREFIX = "myweathernow_";
 
     public function __construct()
     {
@@ -27,7 +27,7 @@ class Forecast
 
         $this->id = $getInput['id'];
 
-        if (empty($this->id)) {
+        if (0 && empty($this->id)) {
             $register = new Register();
             $register->doAction();
             $response = $register->getResponse();
@@ -44,7 +44,8 @@ class Forecast
                     "temperature" => -1,
                     "humidity" => -1,
                     "wind_speed" => -1,
-                    "wind_direction" => -1
+                    "wind_direction" => -1,
+                    "wind_cardinal_direction" => null
                 ),
                 "sentence" => null,
                 "id" => $this->id
@@ -53,8 +54,9 @@ class Forecast
 
     }
 
-    public function doAction()
-    {
+    public function doAction(){
+
+        //get today's data
         $cachedForecast = $this->getForecastFromCache();
         $cache_hit = false;
         if (count($cachedForecast) > 0) {
@@ -71,7 +73,6 @@ class Forecast
 
             if ($forecastData == null) {
                 $this->response['status'] = 500;
-
                 return;
             }
             $temperature = $forecastData['main']['temp'];
@@ -79,14 +80,27 @@ class Forecast
             $wind = $forecastData['wind']['speed'];
             $wind_dir = $forecastData['wind']['deg'];
             $cloudiness = $forecastData['clouds']['all'];
-            usleep(1);
         }
+
+        $yesterday_data = $this->getYesterdaysData();
+        $sentence = SentenceMaker::makeSentence(
+            $yesterday_data,
+            array(
+                'temp' => $temperature,
+                'humidity'=> $humidity,
+                'wind_speed' => $wind,
+                'wind_dir' => $wind_dir,
+                'cloudiness' => $cloudiness
+            )
+        );
 
         $this->response['data']['forecast']['temperature'] = $temperature;
         $this->response['data']['forecast']['humidity'] = $humidity;
         $this->response['data']['forecast']['wind_speed'] = $wind;
         $this->response['data']['forecast']['wind_direction'] = $wind_dir;
+        $this->response['data']['forecast']['wind_cardinal_direction'] = SentenceMaker::windDegreesToDirection($wind_dir);
         $this->response['data']['forecast']['cloudiness'] = $cloudiness;
+        $this->response['data']['sentence'] = utf8_encode($sentence);
 
         if (!$cache_hit) {
             $this->storeForecastData(
@@ -103,11 +117,36 @@ class Forecast
         }
     }
 
-    private function getForecastFromCache()
-    {
+    private function getYesterdaysData(){
+        //get yesterday's data
+        $yesterday_data = $this->getForecastFromCache('yesterday');
+        if(count($yesterday_data) > 0 ){
+            $yesterday_data = $yesterday_data[0];
+
+            return array(
+                'temp' => $yesterday_data['temperature'],
+                'humidity'=> $yesterday_data['humidity'],
+                'wind_speed' => $yesterday_data['wind'],
+                'wind_dir' => $yesterday_data['wind_dir'],
+                'cloudiness' => $yesterday_data['cloudiness']
+            );
+        }
+        else{
+            $yesterday_data = null;
+        }
+        return $yesterday_data;
+    }
+
+    private function getForecastFromCache($when = 'today'){
+        switch($when){
+            case 'today'    : $sql_date = 'now()'; break;
+            case 'yesterday': $sql_date = 'date_sub(now(), interval 1 day )'; break;
+            default :
+                $sql_date = 'now()'; break;
+        }
 
         $stmt = $this->con->prepare("select * from " . self::TABLE_PREFIX . "forecasts
-                          where date between date_sub(now(), interval 10 minute ) and now()");
+                          where date between date_sub(".$sql_date.", interval 10 minute ) and ".$sql_date);
 
         try {
             $stmt->execute();
