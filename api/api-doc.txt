@@ -12,6 +12,8 @@ response: JSON
         - forecast: array
             - temperature: float, Kelvin scale
             - humidity : int, percent scale
-            - windSpeed: float, meters/seconds
+            - wind_speed: float, meters/seconds
+            - wind_direction: int, degrees
+            - cloudiness: int, percent scale
         - sentence: string, sentence in natural language
         - id: the user ID

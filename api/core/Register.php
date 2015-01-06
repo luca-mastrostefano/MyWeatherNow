@@ -19,7 +19,8 @@ class Register {
     }
 
     public function doAction() {
-        $stmt = $this->con->prepare( "insert into users (name) values (null)" );
+        $table_prefix = ""; //"myweathernow_";
+        $stmt = $this->con->prepare( "insert into ".$table_prefix."users (name) values (null)" );
 
         try {
             $inserted = $stmt->execute();
