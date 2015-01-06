@@ -42,7 +42,7 @@ public class APIManager {
                     if(!userID.isValid()){
                         userID.storeUserID(data.getLong("id"));
                     }
-                    return this.creteWeatherInfoFromJson(context, jsonResponse);
+                    return WeatherInfo.creteWeatherInfoFromJson(context, jsonResponse);
                 }
 
             }
@@ -65,15 +65,4 @@ public class APIManager {
         return getRequest;
     }
 
-    private WeatherInfo creteWeatherInfoFromJson(Context context ,JSONObject json) throws JSONException {
-        WeatherInfo weatherInfo = new WeatherInfo(context);
-        JSONObject data = json.getJSONObject("data");
-        JSONObject forecast = json.getJSONObject("forecast");
-        weatherInfo.setHumidity(forecast.getInt("humidity"));
-        weatherInfo.setTemperature(forecast.getDouble("temperature"));
-        weatherInfo.setWindSpeed(forecast.getDouble("wind"));
-        weatherInfo.setSentence(data.getString("sentence"));
-        weatherInfo.store();
-        return weatherInfo;
-    }
 }
