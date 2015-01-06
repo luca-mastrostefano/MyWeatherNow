@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS `forecasts` (
   `wind`        FLOAT DEFAULT NULL,
   `wind_dir`    FLOAT DEFAULT NULL,
   `rain`        FLOAT DEFAULT NULL,
+  `cloudiness`  FLOAT DEFAULT NULL,
   PRIMARY KEY (`id`)
 )
   ENGINE =InnoDB
