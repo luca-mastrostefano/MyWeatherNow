@@ -65,16 +65,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
-                    android:text="Temp."
-                    android:id="@+id/column_temperature"/>
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:gravity="center"
                     android:text="Humidity"
-                    android:id="@+id/column_humidity"/>
+                    android:id="@+id/column_humidity" android:layout_column="0"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".33"
@@ -82,7 +74,15 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="Rain"
-                    android:id="@+id/column_rain"/>
+                    android:id="@+id/column_rain" android:layout_column="1"/>
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight=".33"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:gravity="center"
+                    android:text="Temp."
+                    android:id="@+id/column_temperature" android:layout_column="2"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -94,16 +94,8 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
-                    android:text="8°"
-                    android:id="@+id/value_temperature"/>
-            <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight=".33"
-                    android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:gravity="center"
                     android:text="50%"
-                    android:id="@+id/value_humidity"/>
+                    android:id="@+id/value_humidity" android:layout_column="0"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".33"
@@ -111,7 +103,15 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="10%"
-                    android:id="@+id/value_rain"/>
+                    android:id="@+id/value_rain" android:layout_column="1"/>
+            <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight=".33"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:gravity="center"
+                    android:text="8°"
+                    android:id="@+id/value_temperature" android:layout_column="2"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -123,7 +123,7 @@
                     android:layout_marginLeft="130dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Wind"
-                    android:id="@+id/column_wind"/>
+                    android:id="@+id/column_wind" android:layout_column="2"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -135,7 +135,7 @@
                     android:layout_marginLeft="110dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="12Km/h NE"
-                    android:id="@+id/value_wind"/>
+                    android:id="@+id/value_wind" android:layout_column="2"/>
         </TableRow>
 
     </TableLayout>
