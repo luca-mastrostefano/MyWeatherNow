@@ -7,41 +7,54 @@
     <ImageView
             android:layout_width="119dp"
             android:layout_height="119dp"
-            android:id="@+id/imageView" android:layout_gravity="left|top" android:src="@drawable/weather_sample"
+            android:id="@+id/weather_image" android:layout_gravity="left|top" android:src="@drawable/weather_sample"
             android:layout_marginStart="35dp" android:layout_marginTop="33dp" android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"/>
-    <LinearLayout
+    <RelativeLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="119dp" android:layout_alignTop="@+id/imageView"
-            android:layout_alignBottom="@+id/imageView" android:layout_toEndOf="@+id/imageView">
+            android:layout_height="119dp" android:layout_alignTop="@+id/weather_image"
+            android:layout_alignBottom="@+id/weather_image" android:layout_toEndOf="@+id/weather_image">
+        <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/gps_image" android:layout_gravity="center" android:src="@drawable/gps"
+                android:layout_alignParentTop="true" android:layout_marginLeft="60dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Rome"
-                android:id="@+id/textView" android:layout_gravity="center_horizontal"/>
+                android:id="@+id/city" android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="5dp"
+                android:layout_alignBottom="@id/gps_image"
+                android:layout_toRightOf="@+id/gps_image"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Fri 2 Jan"
-                android:id="@+id/textView2" android:layout_gravity="center_horizontal"/>
-    </LinearLayout>
+                android:text="Mar, 6 Gen"
+                android:id="@+id/date"
+                android:layout_marginBottom="5dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/city"
+                android:layout_alignLeft="@+id/city"/>
+    </RelativeLayout>
     <TextView
             android:layout_width="300dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Now is partially sunny, but cold and with strong wind from north.             So I suggest you to wear an heavy coat"
-            android:id="@+id/textView3"
-            android:layout_below="@+id/imageView" android:layout_alignStart="@+id/imageView"/>
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Now is partially sunny, but cold and with strong wind from north. So I suggest you to wear an heavy coat"
+            android:id="@+id/weather_suggestion"
+            android:layout_below="@+id/weather_image" android:layout_alignStart="@+id/weather_image"/>
     <TableLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" android:layout_below="@+id/textView3"
-            android:layout_marginTop="43dp" android:layout_alignStart="@+id/textView3"
-            android:layout_alignEnd="@+id/textView3">
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/weather_suggestion"
+            android:layout_alignStart="@+id/weather_suggestion"
+            android:layout_marginTop="10dp"
+            android:layout_alignEnd="@+id/weather_suggestion">
 
         <TableRow
                 android:layout_width="fill_parent"
@@ -53,7 +66,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="Temp."
-                    android:id="@+id/textView4"/>
+                    android:id="@+id/column_temperature"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".33"
@@ -61,7 +74,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="Humidity"
-                    android:id="@+id/textView5"/>
+                    android:id="@+id/column_humidity"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".33"
@@ -69,7 +82,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="Rain"
-                    android:id="@+id/textView6"/>
+                    android:id="@+id/column_rain"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -82,7 +95,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="8°"
-                    android:id="@+id/textView7"/>
+                    android:id="@+id/value_temperature"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".33"
@@ -90,7 +103,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="50%"
-                    android:id="@+id/textView8"/>
+                    android:id="@+id/value_humidity"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".33"
@@ -98,7 +111,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="10%"
-                    android:id="@+id/textView9"/>
+                    android:id="@+id/value_rain"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -110,7 +123,7 @@
                     android:layout_marginLeft="130dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Wind"
-                    android:id="@+id/textView10"/>
+                    android:id="@+id/column_wind"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -122,7 +135,7 @@
                     android:layout_marginLeft="110dp"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="12Km/h NE"
-                    android:id="@+id/textView11"/>
+                    android:id="@+id/value_wind"/>
         </TableRow>
 
     </TableLayout>
