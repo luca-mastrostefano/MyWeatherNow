@@ -17,7 +17,12 @@ class Connection {
     private static $instance;
 
     private function __construct() {
-        $this->con = new \PDO( "mysql:host=127.0.0.1:3306;dbname=myweathernow", "root", "" );
+        $this->con = new \PDO(
+            "mysql:host=127.0.0.1:3306;dbname=myweathernow",
+            "root",
+            "",
+            array(\PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")
+        );
         $this->con->setAttribute( \PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION );
     }
 
