@@ -2,7 +2,8 @@ package com.example.myweathernow.background_check;
 
 import android.content.Context;
 import android.location.Location;
-import com.example.myweathernow.WeatherInfo;
+import android.util.Log;
+import com.example.myweathernow.persistency.WeatherInfo;
 import com.example.myweathernow.persistency.UserID;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -16,23 +17,25 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Date;
 
 /**
  * Created by lucamastrostefano on 04/01/15.
  */
 public class APIManager {
 
-    private static final String URL = "http://www.translated.net/luca_checker/check.php";
+    private static final String URL = "http://robertotucci.netsons.org/myweathernow/api/get.php";
 
     public WeatherInfo getWeatherInfo(Context context, Location location) throws Exception{
+        Log.d("APIManager", "start");
         try {
             UserID userID = UserID.getInstance(context);
             final HttpGet getRequest = this.createGetRequest(userID, location);
             final HttpClient httpclient = new DefaultHttpClient();
+            Log.d("APIManager", "httpSent");
             HttpResponse response = httpclient.execute(getRequest);
             final StatusLine statusLine = response.getStatusLine();
             if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                Log.d("APIManager", "httpResponse arrived");
                 final ByteArrayOutputStream out = new ByteArrayOutputStream();
                 response.getEntity().writeTo(out);
                 out.close();
@@ -43,11 +46,12 @@ public class APIManager {
                     if(!userID.isValid()){
                         userID.storeUserID(data.getLong("id"));
                     }
-                    return this.creteWeatherInfoFromJson(jsonResponse);
+                    return WeatherInfo.creteWeatherInfoFromJson(context, jsonResponse);
                 }
 
             }
         } catch (final Exception e) {
+            Log.d("APIManager", "can't perform API call");
             e.printStackTrace();
             throw new Exception("Can't perform API call");
         }
@@ -66,14 +70,4 @@ public class APIManager {
         return getRequest;
     }
 
-    private WeatherInfo creteWeatherInfoFromJson(JSONObject json) throws JSONException {
-        WeatherInfo weatherInfo = new WeatherInfo();
-        JSONObject data = json.getJSONObject("data");
-        JSONObject forecast = json.getJSONObject("forecast");
-        weatherInfo.setHumidity(forecast.getInt("humidity"));
-        weatherInfo.setTemperature(forecast.getDouble("temperature"));
-        weatherInfo.setWind(forecast.getDouble("wind"));
-        weatherInfo.setSentence(data.getString("sentence"));
-        return weatherInfo;
-    }
 }

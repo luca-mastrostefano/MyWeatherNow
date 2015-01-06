@@ -4,8 +4,10 @@ import android.app.*;
 import android.content.*;
 import android.location.*;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.util.*;
-import com.example.myweathernow.*;
+import com.example.myweathernow.persistency.UserLocation;
+import com.example.myweathernow.persistency.WeatherInfo;
 
 /**
  * Created by ele on 03/01/15.
@@ -13,17 +15,19 @@ import com.example.myweathernow.*;
  */
 
 public class SynchService extends IntentService implements LocationListener {
+
     private LocationsDetector locDetector;
     private NotificationHandler notificationHand;
+    private Context context;
 
     public SynchService() {
         super("SynchService");
-        this.locDetector = new LocationsDetector(this.getApplicationContext());
-        this.notificationHand = new NotificationHandler(this.getApplicationContext());
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        this.locDetector = new LocationsDetector(this);
+        this.notificationHand = new NotificationHandler(this);
         Log.i("location check service", "inizio le op di update");
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -37,7 +41,7 @@ public class SynchService extends IntentService implements LocationListener {
         Log.i("location service", "Latitude: " + currentLocation.getLatitude());
         Log.i("location service", "Logitude: " + currentLocation.getLongitude());
         try {
-            WeatherInfo weatherInfo = new APIManager().getWeatherInfo(this.getApplicationContext(), currentLocation);
+            WeatherInfo weatherInfo = new APIManager().getWeatherInfo(this, currentLocation);
         }catch(Exception e){
 
         }

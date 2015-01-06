@@ -1,20 +1,62 @@
 package com.example.myweathernow;
 
 import android.app.*;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.util.*;
+import android.widget.TextView;
 import com.example.myweathernow.background_check.receiver.*;
+import com.example.myweathernow.persistency.WeatherInfo;
+import org.json.JSONException;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class MWNhome extends Activity {
-    /**
-     * Called when the activity is first created.
-     */
+
+    private static final DateFormat dateFormatter = new SimpleDateFormat("EEE, d MMM");
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        Log.i("MWN", "sono nella main activity");
-        AlarmReceiver.register(this);
+        Log.i("MWNhome", "Entrato nella home");
+        if(this.isFirstStart()){
+            AlarmReceiver.register(this);
+        }
+        try {
+            WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());
+            ((TextView) this.findViewById(R.id.city)).setText("Roma");
+            ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
+            ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
+            ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
+            ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(weatherInfo.getTemperature()));
+            ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()));
+            ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()));
+        } catch (JSONException e) {
+            //Cant get weatherInfo
+        }
+
     }
+
+    private boolean isFirstStart(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String firstStart = "first_start";
+        boolean isFirstStart = sharedPreferences.getBoolean(firstStart, true);
+        if(isFirstStart){
+            final SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
+            preferencesEditor.putBoolean(firstStart, false);
+            preferencesEditor.commit();
+        }
+        if(isFirstStart) {
+            Log.i("MWNhome", "firstStart");
+        }else{
+            Log.i("MWNhome", "già partito");
+        }
+        return isFirstStart;
+    }
+
 }
 
