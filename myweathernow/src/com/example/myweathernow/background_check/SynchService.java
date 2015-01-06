@@ -4,7 +4,9 @@ import android.app.*;
 import android.content.*;
 import android.location.*;
 import android.os.*;
+import android.preference.PreferenceManager;
 import android.util.*;
+import com.example.myweathernow.persistency.UserLocation;
 import com.example.myweathernow.persistency.WeatherInfo;
 
 /**
@@ -13,13 +15,15 @@ import com.example.myweathernow.persistency.WeatherInfo;
  */
 
 public class SynchService extends IntentService implements LocationListener {
+
     private LocationsDetector locDetector;
     private NotificationHandler notificationHand;
+    private Context context;
 
     public SynchService() {
         super("SynchService");
-        this.locDetector = new LocationsDetector(this.getApplicationContext());
-        this.notificationHand = new NotificationHandler(this.getApplicationContext());
+        this.locDetector = new LocationsDetector(this);
+        this.notificationHand = new NotificationHandler(this);
     }
 
     @Override
@@ -37,7 +41,7 @@ public class SynchService extends IntentService implements LocationListener {
         Log.i("location service", "Latitude: " + currentLocation.getLatitude());
         Log.i("location service", "Logitude: " + currentLocation.getLongitude());
         try {
-            WeatherInfo weatherInfo = new APIManager().getWeatherInfo(this.getApplicationContext(), currentLocation);
+            WeatherInfo weatherInfo = new APIManager().getWeatherInfo(this, currentLocation);
         }catch(Exception e){
 
         }

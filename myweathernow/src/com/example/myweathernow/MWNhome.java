@@ -22,6 +22,7 @@ public class MWNhome extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        Log.i("MWNhome", "Entrato nella home");
         if(this.isFirstStart()){
             AlarmReceiver.register(this.getApplicationContext());
         }
@@ -41,13 +42,18 @@ public class MWNhome extends Activity {
     }
 
     private boolean isFirstStart(){
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String firstStart = "first_start";
         boolean isFirstStart = sharedPreferences.getBoolean(firstStart, true);
         if(isFirstStart){
             final SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
             preferencesEditor.putBoolean(firstStart, false);
             preferencesEditor.commit();
+        }
+        if(isFirstStart) {
+            Log.i("MWNhome", "firstStart");
+        }else{
+            Log.i("MWNhome", "già partito");
         }
         return isFirstStart;
     }

@@ -2,6 +2,8 @@ package com.example.myweathernow.persistency;
 
 import android.content.*;
 import android.location.*;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 /**
  * Created by ele on 05/01/15.
@@ -14,7 +16,8 @@ public class UserLocation {
     private static final String locationPing = "number_of_ping";
 
     public UserLocation(Context context) {
-        this.sharedPreferences = context.getSharedPreferences(UserLocation.preferencesName, 0);
+        Log.v("UserLocation", context.toString());
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.preferencesEditor = this.sharedPreferences.edit();
     }
 

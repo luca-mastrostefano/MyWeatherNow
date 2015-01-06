@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
+import android.preference.PreferenceManager;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,7 +31,7 @@ public class WeatherInfo {
 
     public void store(Context context){
         try {
-            SharedPreferences sharedPreferences = context.getSharedPreferences(WeatherInfo.preferencesName, 0);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
             JSONObject weather_description = new JSONObject();
             weather_description.put("humidity", Integer.toString(this.humidity));
@@ -45,7 +46,7 @@ public class WeatherInfo {
     }
 
     public static WeatherInfo getLast(Context context) throws JSONException {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(WeatherInfo.preferencesName, 0);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String weatherStr = sharedPreferences.getString(WeatherInfo.weatherKey, "");
         JSONObject weather_description = new JSONObject(weatherStr);
         WeatherInfo weatherInfo = new WeatherInfo();

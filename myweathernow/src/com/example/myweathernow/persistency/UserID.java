@@ -2,6 +2,7 @@ package com.example.myweathernow.persistency;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 /**
  * Created by lucamastrostefano on 05/01/15.
@@ -15,7 +16,7 @@ public class UserID {
     private long userID;
 
     private UserID(final Context context) {
-        this.sharedPreferences = context.getSharedPreferences(UserID.preferencesName, 0);
+        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.userID = this.getUserID();
     }
 
