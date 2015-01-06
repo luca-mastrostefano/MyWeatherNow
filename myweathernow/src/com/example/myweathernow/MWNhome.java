@@ -31,10 +31,9 @@ public class MWNhome extends Activity {
             ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
             ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
             ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
-            ((TextView) this.findViewById(R.id.value_rain)).setText(weatherInfo.getHumidity());
-            ((TextView) this.findViewById(R.id.value_temperature)).setText(weatherInfo.getHumidity());
-            ((TextView) this.findViewById(R.id.value_wind)).setText(weatherInfo.getHumidity());
-            ((TextView) this.findViewById(R.id.value_temperature)).setText(weatherInfo.getHumidity());
+            ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(weatherInfo.getTemperature()));
+            ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()));
+            ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()));
         } catch (JSONException e) {
             //Cant get weatherInfo
         }
