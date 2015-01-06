@@ -1,4 +1,4 @@
-package com.example.myweathernow;
+package com.example.myweathernow.background_check.receiver;
 
 /**
  * Created by ele on 03/01/15.
@@ -8,7 +8,7 @@ package com.example.myweathernow;
 
 import android.content.*;
 import android.util.*;
-import com.example.myweathernow.background_check.*;
+import com.example.myweathernow.background_check.receiver.*;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 

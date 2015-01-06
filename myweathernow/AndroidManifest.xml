@@ -14,12 +14,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <receiver android:name=".BootCompletedReceiver" android:enabled="true">
+        <receiver android:name=".background_check.receiver.BootCompletedReceiver" android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <receiver android:name=".background_check.AlarmReceiver" android:enabled="true"/>
+        <receiver android:name=".background_check.receiver.AlarmReceiver" android:enabled="true"/>
         <service android:name=".background_check.SynchService" android:exported="false"/>
     </application>
 </manifest>

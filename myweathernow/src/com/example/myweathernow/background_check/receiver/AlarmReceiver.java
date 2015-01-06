@@ -1,4 +1,4 @@
-package com.example.myweathernow.background_check;
+package com.example.myweathernow.background_check.receiver;
 
 /**
  * Created by ele on 03/01/15.
@@ -9,6 +9,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.*;
 import android.util.*;
+import com.example.myweathernow.background_check.*;
 
 public class AlarmReceiver extends BroadcastReceiver {
 

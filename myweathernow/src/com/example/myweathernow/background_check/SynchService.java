@@ -2,12 +2,10 @@ package com.example.myweathernow.background_check;
 
 import android.app.*;
 import android.content.*;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
+import android.location.*;
+import android.os.*;
 import android.util.*;
-import com.example.myweathernow.MeteoInfo;
+import com.example.myweathernow.*;
 
 /**
  * Created by ele on 03/01/15.
@@ -15,9 +13,11 @@ import com.example.myweathernow.MeteoInfo;
  */
 
 public class SynchService extends IntentService implements LocationListener {
+    private LocationsDetector locDetector;
 
     public SynchService() {
         super("SynchService");
+        this.locDetector = new LocationsDetector(this);
     }
 
     @Override
@@ -32,24 +32,23 @@ public class SynchService extends IntentService implements LocationListener {
 
     @Override
     public void onLocationChanged(Location currentLocation) {
-        currentLocation.setLatitude(currentLocation.getLatitude());
-        currentLocation.setLatitude(currentLocation.getLatitude());
         Log.i("location service", "Latitude: " + currentLocation.getLatitude());
         Log.i("location service", "Logitude: " + currentLocation.getLongitude());
+
         try {
+            // prendo le notizie del meteo
             MeteoInfo meteo = new APIManager().getMeteoInfo(this.getApplicationContext(), currentLocation);
         }catch(Exception e){
 
         }
-        //
-        //if(location == da mostrare){
-        //      aggiorna e attiva notifica
-        // }else{
-        //      disattiva notifica
-        // }
+        boolean showNotification = this.locDetector.addLocationToHistory(currentLocation);
+        if(showNotification){
+            //TODO  aggiorna e attiva notifica
+        } else{
+            //TODO disattiva notifica
+        }
 
-        // solo per testare
-        new LocationsDetector().addLocationToHistory(currentLocation);
+
         NotificationHandler handler = new NotificationHandler(this.getApplicationContext());
         handler.show("Notifica creata");
         handler.update("Notifica aggiornata");

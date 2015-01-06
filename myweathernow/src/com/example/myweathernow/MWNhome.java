@@ -3,7 +3,7 @@ package com.example.myweathernow;
 import android.app.*;
 import android.os.*;
 import android.util.*;
-import com.example.myweathernow.background_check.*;
+import com.example.myweathernow.background_check.receiver.*;
 
 public class MWNhome extends Activity {
     /**
