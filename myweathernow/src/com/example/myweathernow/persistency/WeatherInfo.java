@@ -21,6 +21,7 @@ public class WeatherInfo {
     private int humidity;
     private double windSpeed;
     private double windDirection;
+    private String windCardinalDirection;
     private double cloudiness;
     private double temperature;
     private String sentence;
@@ -29,7 +30,7 @@ public class WeatherInfo {
     public WeatherInfo() {
     }
 
-    public void store(Context context){
+    public void store(Context context) {
         try {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
@@ -37,12 +38,14 @@ public class WeatherInfo {
             weather_description.put("humidity", Integer.toString(this.humidity));
             weather_description.put("windSpeed", Double.toString(this.windSpeed));
             weather_description.put("windDirection", Double.toString(this.windDirection));
+            weather_description.put("windCardinalDirection", this.windCardinalDirection);
             weather_description.put("cloudiness", Double.toString(this.cloudiness));
             weather_description.put("sentence", this.sentence);
             weather_description.put("date", this.date.getTime());
             preferencesEditor.putString(WeatherInfo.weatherKey, weather_description.toString());
             preferencesEditor.commit();
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
     public static WeatherInfo getLast(Context context) throws JSONException {
@@ -53,71 +56,62 @@ public class WeatherInfo {
         weatherInfo.humidity = weather_description.getInt("humidity");
         weatherInfo.windSpeed = weather_description.getDouble("windSpeed");
         weatherInfo.windDirection = weather_description.getDouble("windDirection");
+        weatherInfo.windCardinalDirection = weather_description.getString("windCardinalDirection");
         weatherInfo.cloudiness = weather_description.getDouble("cloudiness");
         weatherInfo.sentence = weather_description.getString("sentence");
         weatherInfo.date = new Date(weather_description.getLong("date"));
         return weatherInfo;
     }
 
-    public static WeatherInfo creteWeatherInfoFromJson(Context context ,JSONObject json) throws JSONException {
+    public static WeatherInfo creteWeatherInfoFromJson(Context context, JSONObject json) throws JSONException {
         WeatherInfo weatherInfo = new WeatherInfo();
         JSONObject data = json.getJSONObject("data");
         JSONObject forecast = json.getJSONObject("forecast");
-        weatherInfo.setHumidity(forecast.getInt("humidity"));
-        weatherInfo.setTemperature(forecast.getDouble("temperature"));
-        weatherInfo.setWindSpeed(forecast.getDouble("wind_speed"));
-        weatherInfo.setWindDirection(forecast.getDouble("wind_direction"));
-        weatherInfo.setCloudiness(forecast.getDouble("cloudiness"));
-        weatherInfo.setSentence(data.getString("sentence"));
-        weatherInfo.setDate(new Date());
+        weatherInfo.humidity = forecast.getInt("humidity");
+        weatherInfo.temperature = forecast.getDouble("temperature");
+        weatherInfo.windSpeed = forecast.getDouble("wind_speed");
+        weatherInfo.windDirection = forecast.getDouble("wind_direction");
+        weatherInfo.windCardinalDirection = forecast.getString("wind_cardinal_direction");
+        weatherInfo.cloudiness = forecast.getDouble("cloudiness");
+        weatherInfo.sentence = data.getString("sentence");
+        weatherInfo.date = new Date();
         weatherInfo.store(context);
         return weatherInfo;
     }
 
-    public String getSentence() {return sentence;}
-
-    public void setSentence(String sentence) {
-        this.sentence = sentence;
-    }
-
-    public double getTemperature() {
-        return temperature;
-    }
-
-    public void setTemperature(double temperature) {
-        this.temperature = temperature;
+    public static String getPreferencesName() {
+        return preferencesName;
     }
 
     public int getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
-        this.humidity = humidity;
-    }
-
     public double getWindSpeed() {
         return windSpeed;
-    }
-
-    public void setWindSpeed(double windSpeed) {
-        this.windSpeed = windSpeed;
     }
 
     public double getWindDirection() {
         return windDirection;
     }
 
-    public void setWindDirection(double windDirection) {
-        this.windDirection = windDirection;
+    public String getWindCardinalDirection() {
+        return windCardinalDirection;
     }
 
-    public double getCloudiness() {return cloudiness;}
+    public double getCloudiness() {
+        return cloudiness;
+    }
 
-    public void setCloudiness(double cloudiness) {this.cloudiness = cloudiness;}
+    public double getTemperature() {
+        return temperature;
+    }
 
-    public Date getDate() {return date;}
+    public String getSentence() {
+        return sentence;
+    }
 
-    public void setDate(Date date) {this.date = date;}
-
+    public Date getDate() {
+        return date;
+    }
 }
