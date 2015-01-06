@@ -1,9 +1,8 @@
 package com.example.myweathernow.background_check;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
-import com.example.myweathernow.MeteoInfo;
+import com.example.myweathernow.WeatherInfo;
 import com.example.myweathernow.persistency.UserID;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -13,7 +12,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -26,18 +25,10 @@ public class APIManager {
 
     private static final String URL = "http://www.translated.net/luca_checker/check.php";
 
-    public MeteoInfo getMeteoInfo(Context context, Location location) throws Exception{
-        MeteoInfo meteoInfo = null;
+    public WeatherInfo getWeatherInfo(Context context, Location location) throws Exception{
         try {
-            final HttpGet getRequest = new HttpGet(APIManager.URL);
-            HttpParams params = new BasicHttpParams();
             UserID userID = UserID.getInstance(context);
-            if(userID.isValid()) {
-                params.setLongParameter("userid", userID.getUserID());
-            }
-            params.setDoubleParameter("latitude", location.getLatitude());
-            params.setDoubleParameter("longitude", location.getLongitude());
-            getRequest.setParams(params);
+            final HttpGet getRequest = this.createGetRequest(userID, location);
             final HttpClient httpclient = new DefaultHttpClient();
             HttpResponse response = httpclient.execute(getRequest);
             final StatusLine statusLine = response.getStatusLine();
@@ -48,12 +39,11 @@ public class APIManager {
                 String responseString = out.toString();
                 final JSONObject jsonResponse = new JSONObject(responseString.trim());
                 if(jsonResponse.getInt("status") == 200){
-                    final Date now = new Date();
-                    meteoInfo = new MeteoInfo();
                     JSONObject data = jsonResponse.getJSONObject("data");
                     if(!userID.isValid()){
                         userID.storeUserID(data.getLong("id"));
                     }
+                    return this.creteWeatherInfoFromJson(jsonResponse);
                 }
 
             }
@@ -61,7 +51,29 @@ public class APIManager {
             e.printStackTrace();
             throw new Exception("Can't perform API call");
         }
-        return null;
+        throw new Exception("Can't perform API call");
     }
 
+    private HttpGet createGetRequest(UserID userID, Location location){
+        final HttpGet getRequest = new HttpGet(APIManager.URL);
+        HttpParams params = new BasicHttpParams();
+        if(userID.isValid()) {
+            params.setLongParameter("userid", userID.getUserID());
+        }
+        params.setDoubleParameter("latitude", location.getLatitude());
+        params.setDoubleParameter("longitude", location.getLongitude());
+        getRequest.setParams(params);
+        return getRequest;
+    }
+
+    private WeatherInfo creteWeatherInfoFromJson(JSONObject json) throws JSONException {
+        WeatherInfo weatherInfo = new WeatherInfo();
+        JSONObject data = json.getJSONObject("data");
+        JSONObject forecast = json.getJSONObject("forecast");
+        weatherInfo.setHumidity(forecast.getInt("humidity"));
+        weatherInfo.setTemperature(forecast.getDouble("temperature"));
+        weatherInfo.setWind(forecast.getDouble("wind"));
+        weatherInfo.setSentence(data.getString("sentence"));
+        return weatherInfo;
+    }
 }

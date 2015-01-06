@@ -37,7 +37,7 @@ public class SynchService extends IntentService implements LocationListener {
         Log.i("location service", "Latitude: " + currentLocation.getLatitude());
         Log.i("location service", "Logitude: " + currentLocation.getLongitude());
         try {
-            MeteoInfo meteo = new APIManager().getMeteoInfo(this.getApplicationContext(), currentLocation);
+            WeatherInfo weatherInfo = new APIManager().getWeatherInfo(this.getApplicationContext(), currentLocation);
         }catch(Exception e){
 
         }
