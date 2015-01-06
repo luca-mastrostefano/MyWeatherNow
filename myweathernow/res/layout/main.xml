@@ -10,24 +10,28 @@
             android:id="@+id/background"
             android:src="@drawable/sky"
             android:scaleX="1.5"
-            android:scaleY="1.8"/>
+            android:scaleY="2"/>
     <ImageView
             android:layout_width="119dp"
             android:layout_height="119dp"
             android:id="@+id/weather_image" android:layout_gravity="left|top" android:src="@drawable/d02"
-            android:layout_marginStart="35dp" android:layout_marginTop="5dp" android:layout_alignParentTop="true"
+            android:layout_marginStart="35dp" android:layout_marginTop="15dp" android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"/>
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="119dp" android:layout_alignTop="@+id/weather_image"
+            android:layout_height="119dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="10dp"
             android:layout_alignBottom="@+id/weather_image" android:layout_toEndOf="@+id/weather_image"
             android:id="@+id/relativeLayout">
         <ImageView
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:id="@+id/gps_image" android:layout_gravity="center" android:src="@drawable/gps_white"
-                android:layout_alignParentTop="true" android:layout_marginLeft="60dp"/>
+                android:id="@+id/gps_image" android:layout_gravity="center"
+                android:src="@drawable/gps_white"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,6 +58,7 @@
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Now is partially sunny, but cold and with strong windSpeed from north. So I suggest you to wear an heavy coat"
+            android:textColor="#ff000000"
             android:id="@+id/weather_suggestion"
             android:layout_alignLeft="@+id/weather_image" android:layout_below="@+id/weather_image"/>
     <TableLayout
@@ -104,7 +109,7 @@
                     android:gravity="center"
                     android:text="50%"
                     android:id="@+id/value_humidity"
-                    android:layout_column="0"/>
+                    android:layout_column="0" android:textColor="#ff000000"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".50"
@@ -112,7 +117,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="8°"
-                    android:id="@+id/value_temperature" android:layout_column="2"/>
+                    android:id="@+id/value_temperature" android:layout_column="2" android:textColor="#ff000000"/>
         </TableRow>
         <TableRow
                 android:layout_width="fill_parent"
@@ -153,7 +158,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="20Km N/E"
-                    android:id="@+id/value_wind" android:layout_column="0"/>
+                    android:id="@+id/value_wind" android:layout_column="0" android:textColor="#ff000000"/>
             <TextView
                     android:layout_width="0dp"
                     android:layout_weight=".50"
@@ -161,7 +166,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:gravity="center"
                     android:text="25%"
-                    android:id="@+id/value_cloud" android:layout_column="2"/>
+                    android:id="@+id/value_cloud" android:layout_column="2" android:textColor="#ff000000"/>
         </TableRow>
 
     </TableLayout>
@@ -169,25 +174,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/clothes1" android:layout_below="@+id/weather_suggestion"
-            android:layout_alignLeft="@+id/weather_suggestion" android:src="@drawable/cap"/>
+            android:layout_alignLeft="@+id/weather_suggestion" android:src="@drawable/cap"
+            android:layout_marginTop="50dp"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/clothes2"
             android:src="@drawable/heavy_coat"
-            android:layout_below="@+id/weather_suggestion" android:layout_toLeftOf="@+id/relativeLayout"/>
+            android:layout_below="@+id/weather_suggestion" android:layout_toLeftOf="@+id/relativeLayout"
+            android:layout_marginTop="50dp"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/clothes3"
             android:src="@drawable/gloves"
             android:layout_below="@+id/weather_suggestion" android:layout_toLeftOf="@+id/clothes4"
-            android:layout_marginRight="33dp"/>
+            android:layout_marginRight="33dp" android:layout_marginTop="50dp"/>
     <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/clothes4"
             android:src="@drawable/scarf"
-            android:layout_below="@+id/weather_suggestion" android:layout_alignRight="@+id/weather_suggestion"/>
+            android:layout_below="@+id/weather_suggestion" android:layout_alignRight="@+id/weather_suggestion"
+            android:layout_marginTop="50dp"/>
 </RelativeLayout>
 
