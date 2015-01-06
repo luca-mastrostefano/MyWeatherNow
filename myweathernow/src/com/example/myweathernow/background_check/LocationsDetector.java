@@ -8,29 +8,29 @@ import com.example.myweathernow.persistency.*;
  * Created by lucamastrostefano on 04/01/15.
  */
 public class LocationsDetector {
-    private final TemporanyLocation tempLoc;
+    private final UserLocation tempLoc;
 
     public LocationsDetector(Context c) {
-        this.tempLoc = new TemporanyLocation(c);
+        this.tempLoc = new UserLocation(c);
     }
 
     public boolean addLocationToHistory(Location currentLocation) {
         boolean showNotification = false;
         // first time
         if (!this.tempLoc.hasLocation()) {
-            this.tempLoc.addLocation(currentLocation);
+            this.tempLoc.setLocation(currentLocation);
             showNotification = true;
         } else {
-            Location oldLoc = this.tempLoc.getOldLocation();
+            Location oldLoc = this.tempLoc.getLastLocation();
             // due location sono diverse se distanti più di 200m
             if (currentLocation.distanceTo(oldLoc) >= 200) {
                 // controllo quanto valeva l'ultimo ping
-                int oldPing = this.tempLoc.getOldPing();
+                int oldPing = this.tempLoc.getLastPing();
                 if (oldPing >= 6) {
                     showNotification = false;
                 }
                 // salvo l'ultima come corrente
-                this.tempLoc.addLocation(currentLocation);
+                this.tempLoc.setLocation(currentLocation);
             } else {
                 // distanza < 200m, approssimiamo a stessa location
                 // aggiorno quella di prima aumentando il ping

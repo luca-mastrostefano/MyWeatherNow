@@ -13,7 +13,8 @@ import com.example.myweathernow.background_check.*;
 
 public class AlarmReceiver extends BroadcastReceiver {
 
-    public final static int DELAY_ms = 1000 * 60 * 10;
+    //public final static int DELAY_ms = 1000 * 60 * 10;
+    public final static int DELAY_ms = 1000 * 10;
 
     @Override
     public void onReceive(Context context, Intent bootIntent) {
@@ -26,6 +27,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public static void register(Context context){
         AlarmManager alarmMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmReceiver.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         PendingIntent alarmIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         // ripete l'operazione ogni 10 secondi (dopo allunghiamo i tempi)
         alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,

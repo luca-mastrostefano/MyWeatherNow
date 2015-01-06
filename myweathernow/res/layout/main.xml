@@ -53,7 +53,7 @@
             android:layout_height="150dp"
             android:gravity="center"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Now is partially sunny, but cold and with strong wind from north. So I suggest you to wear an heavy coat"
+            android:text="Now is partially sunny, but cold and with strong windSpeed from north. So I suggest you to wear an heavy coat"
             android:id="@+id/weather_suggestion"
             android:layout_alignLeft="@+id/weather_image" android:layout_below="@+id/weather_image"/>
     <TableLayout
