@@ -28,17 +28,23 @@ public class MWNhome extends Activity {
         }
         try {
             WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());
-            ((TextView) this.findViewById(R.id.city)).setText("Roma");
-            ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
-            ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
-            ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
-            ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(weatherInfo.getTemperature()));
-            ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()) + " [m/s] " + weatherInfo.getWindCardinalDirection());
-            ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()));
+            if(weatherInfo != null) {
+                this.refreshUI(weatherInfo);
+            }
         } catch (JSONException e) {
             //Cant get weatherInfo
         }
 
+    }
+
+    public void refreshUI(WeatherInfo weatherInfo){
+        ((TextView) this.findViewById(R.id.city)).setText("Roma");
+        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
+        ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
+        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
+        ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(weatherInfo.getTemperature()));
+        ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()) + " [m/s] " + weatherInfo.getWindCardinalDirection());
+        ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()));
     }
 
     private boolean isFirstStart(){

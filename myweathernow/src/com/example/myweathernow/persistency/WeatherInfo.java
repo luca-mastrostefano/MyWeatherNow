@@ -50,17 +50,20 @@ public class WeatherInfo {
 
     public static WeatherInfo getLast(Context context) throws JSONException {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String weatherStr = sharedPreferences.getString(WeatherInfo.weatherKey, "");
-        JSONObject weather_description = new JSONObject(weatherStr);
-        WeatherInfo weatherInfo = new WeatherInfo();
-        weatherInfo.humidity = weather_description.getInt("humidity");
-        weatherInfo.windSpeed = weather_description.getDouble("windSpeed");
-        weatherInfo.windDirection = weather_description.getDouble("windDirection");
-        weatherInfo.windCardinalDirection = weather_description.getString("windCardinalDirection");
-        weatherInfo.cloudiness = weather_description.getDouble("cloudiness");
-        weatherInfo.sentence = weather_description.getString("sentence");
-        weatherInfo.date = new Date(weather_description.getLong("date"));
-        return weatherInfo;
+        String weatherStr = sharedPreferences.getString(WeatherInfo.weatherKey, null);
+        if(weatherStr != null) {
+            JSONObject weather_description = new JSONObject(weatherStr);
+            WeatherInfo weatherInfo = new WeatherInfo();
+            weatherInfo.humidity = weather_description.getInt("humidity");
+            weatherInfo.windSpeed = weather_description.getDouble("windSpeed");
+            weatherInfo.windDirection = weather_description.getDouble("windDirection");
+            weatherInfo.windCardinalDirection = weather_description.getString("windCardinalDirection");
+            weatherInfo.cloudiness = weather_description.getDouble("cloudiness");
+            weatherInfo.sentence = weather_description.getString("sentence");
+            weatherInfo.date = new Date(weather_description.getLong("date"));
+            return weatherInfo;
+        }
+        return null;
     }
 
     public static WeatherInfo creteWeatherInfoFromJson(Context context, JSONObject json) throws JSONException {
