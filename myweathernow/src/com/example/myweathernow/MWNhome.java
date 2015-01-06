@@ -24,7 +24,7 @@ public class MWNhome extends Activity {
         setContentView(R.layout.main);
         Log.i("MWNhome", "Entrato nella home");
         if(this.isFirstStart()){
-            AlarmReceiver.register(this.getApplicationContext());
+            AlarmReceiver.register(this);
         }
         try {
             WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());

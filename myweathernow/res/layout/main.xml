@@ -62,7 +62,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="40dp"
             android:layout_alignLeft="@+id/weather_suggestion"
-            android:layout_alignRight="@id/weather_suggestion">
+            android:layout_alignRight="@id/weather_suggestion" android:id="@+id/tableLayout">
 
         <TableRow
                 android:layout_width="fill_parent"
@@ -164,5 +164,12 @@
         </TableRow>
 
     </TableLayout>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Button"
+                android:id="@+id/button"
+                android:layout_above="@+id/tableLayout"
+                android:layout_centerHorizontal="true"/>
 </RelativeLayout>
 
