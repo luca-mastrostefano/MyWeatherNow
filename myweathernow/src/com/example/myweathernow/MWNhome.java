@@ -24,7 +24,7 @@ public class MWNhome extends Activity {
         setContentView(R.layout.main);
         Log.i("MWNhome", "Entrato nella home");
         if(this.isFirstStart()){
-            AlarmReceiver.register(this.getApplicationContext());
+            AlarmReceiver.register(this);
         }
         try {
             WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());
@@ -33,7 +33,7 @@ public class MWNhome extends Activity {
             ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
             ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
             ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(weatherInfo.getTemperature()));
-            ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()));
+            ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()) + " [m/s] " + weatherInfo.getWindCardinalDirection());
             ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()));
         } catch (JSONException e) {
             //Cant get weatherInfo

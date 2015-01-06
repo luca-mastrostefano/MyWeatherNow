@@ -22,12 +22,12 @@ public class SynchService extends IntentService implements LocationListener {
 
     public SynchService() {
         super("SynchService");
-        this.locDetector = new LocationsDetector(this);
-        this.notificationHand = new NotificationHandler(this);
     }
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        this.locDetector = new LocationsDetector(this);
+        this.notificationHand = new NotificationHandler(this);
         Log.i("location check service", "inizio le op di update");
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);

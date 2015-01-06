@@ -13,7 +13,8 @@ response: JSON
             - temperature: float, Kelvin scale
             - humidity : int, percent scale
             - wind_speed: float, meters/seconds
-            - wind_direction: int, degrees
+            - wind_direction: float, degrees
+            - wind_cardinal_direction: string, closest cardinal point over 16 availables.
             - cloudiness: int, percent scale
         - sentence: string, sentence in natural language
         - id: the user ID
