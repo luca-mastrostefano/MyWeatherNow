@@ -39,8 +39,8 @@ class Forecast {
                 "forecast" => array(
                     "temperature" => -1,
                     "humidity" => -1,
-                    "wind" => -1,
-                    "wind_direction" => -1
+                    "windSpeed" => -1,
+                    "windDirection" => -1
                 ),
                 "sentence" => null,
                 "id" => $this->id
@@ -58,7 +58,7 @@ class Forecast {
 
             $temperature = $forecastData[ 'temperature' ];
             $humidity    = $forecastData[ 'humidity' ];
-            $wind        = $forecastData[ 'wind' ];
+            $windSpeed        = $forecastData[ 'windSpeed' ];
             $wind_dir    = $forecastData[ 'w_dir' ];
         } else {
             $forecastData = $this->getDataFromOpenWeatherMap();
@@ -72,15 +72,15 @@ class Forecast {
             }
             $temperature = $forecastData[ 'main' ][ 'temp' ];
             $humidity    = $forecastData[ 'main' ][ 'humidity' ];
-            $wind        = $forecastData[ 'wind' ][ 'speed' ];
-            $wind_dir    = $forecastData[ 'wind' ][ 'deg' ];
+            $windSpeed        = $forecastData[ 'windSpeed' ][ 'speed' ];
+            $wind_dir    = $forecastData[ 'windSpeed' ][ 'deg' ];
             usleep( 1 );
         }
 
         $this->response['data']['forecast']['temperature'] = $temperature;
         $this->response['data']['forecast']['humidity'] = $humidity;
-        $this->response['data']['forecast']['wind'] = $wind;
-        $this->response[ 'data' ][ 'forecast' ][ 'wind_direction' ] = $wind_dir;
+        $this->response['data']['forecast']['windSpeed'] = $windSpeed;
+        $this->response[ 'data' ][ 'forecast' ][ 'windDirection' ] = $wind_dir;
 
         if ( !$cache_hit ) {
             $this->storeForecastData(
@@ -88,7 +88,7 @@ class Forecast {
                      'city' => "Rome",
                      'temp' => $temperature,
                      'hum' => $humidity,
-                     'wind' => $wind,
+                     'windSpeed' => $windSpeed,
                      'w_dir' => $wind_dir,
                      'rain' => 0
                  )
@@ -112,8 +112,8 @@ class Forecast {
     }
 
     private function storeForecastData( Array $forecast_data ) {
-        $stmt = $this->con->prepare( "insert into forecasts (city, temperature, humidity, wind, wind_dir, rain)
-                  values (:city, :temp, :hum, :wind, :w_dir, :rain)
+        $stmt = $this->con->prepare( "insert into forecasts (city, temperature, humidity, windSpeed, wind_dir, rain)
+                  values (:city, :temp, :hum, :windSpeed, :w_dir, :rain)
         " );
 
         $stmt->execute(
@@ -121,7 +121,7 @@ class Forecast {
                  ":city" => $forecast_data[ 'city' ],
                  ":temp" => $forecast_data[ 'temp' ],
                  ":hum" => $forecast_data[ 'hum' ],
-                 ":wind" => $forecast_data[ 'wind' ],
+                 ":windSpeed" => $forecast_data[ 'windSpeed' ],
                  ":w_dir" => $forecast_data[ 'w_dir' ],
                  ":rain" => $forecast_data[ 'rain' ]
             )

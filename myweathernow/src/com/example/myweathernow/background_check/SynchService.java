@@ -5,7 +5,7 @@ import android.content.*;
 import android.location.*;
 import android.os.*;
 import android.util.*;
-import com.example.myweathernow.*;
+import com.example.myweathernow.persistency.WeatherInfo;
 
 /**
  * Created by ele on 03/01/15.

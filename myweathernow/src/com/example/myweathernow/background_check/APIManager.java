@@ -2,7 +2,7 @@ package com.example.myweathernow.background_check;
 
 import android.content.Context;
 import android.location.Location;
-import com.example.myweathernow.WeatherInfo;
+import com.example.myweathernow.persistency.WeatherInfo;
 import com.example.myweathernow.persistency.UserID;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -16,7 +16,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Date;
 
 /**
  * Created by lucamastrostefano on 04/01/15.
@@ -43,7 +42,7 @@ public class APIManager {
                     if(!userID.isValid()){
                         userID.storeUserID(data.getLong("id"));
                     }
-                    return this.creteWeatherInfoFromJson(jsonResponse);
+                    return this.creteWeatherInfoFromJson(context, jsonResponse);
                 }
 
             }
@@ -66,14 +65,15 @@ public class APIManager {
         return getRequest;
     }
 
-    private WeatherInfo creteWeatherInfoFromJson(JSONObject json) throws JSONException {
-        WeatherInfo weatherInfo = new WeatherInfo();
+    private WeatherInfo creteWeatherInfoFromJson(Context context ,JSONObject json) throws JSONException {
+        WeatherInfo weatherInfo = new WeatherInfo(context);
         JSONObject data = json.getJSONObject("data");
         JSONObject forecast = json.getJSONObject("forecast");
         weatherInfo.setHumidity(forecast.getInt("humidity"));
         weatherInfo.setTemperature(forecast.getDouble("temperature"));
-        weatherInfo.setWind(forecast.getDouble("wind"));
+        weatherInfo.setWindSpeed(forecast.getDouble("wind"));
         weatherInfo.setSentence(data.getString("sentence"));
+        weatherInfo.store();
         return weatherInfo;
     }
 }
