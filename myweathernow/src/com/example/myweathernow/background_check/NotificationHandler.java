@@ -4,6 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.support.v4.app.*;
 import com.example.myweathernow.*;
+import com.example.myweathernow.persistency.WeatherInfo;
 
 /**
  * Created by lucamastrostefano on 04/01/15.
@@ -21,9 +22,9 @@ public class NotificationHandler {
                 (NotificationManager) this.c.getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    public void show(String notification) {
+    public void show(WeatherInfo weatherInfo) {
         mBuilder.setSmallIcon(R.drawable.weather_sample);
-        mBuilder.setContentText(notification);
+        mBuilder.setContentText(weatherInfo.getSentence());
         mNotificationManager.notify(notificationID, mBuilder.build());
     }
 

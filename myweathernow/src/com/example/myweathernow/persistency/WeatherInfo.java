@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,11 +36,12 @@ public class WeatherInfo {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
             JSONObject weather_description = new JSONObject();
-            weather_description.put("humidity", Integer.toString(this.humidity));
-            weather_description.put("windSpeed", Double.toString(this.windSpeed));
-            weather_description.put("windDirection", Double.toString(this.windDirection));
+            weather_description.put("temperature", this.temperature);
+            weather_description.put("humidity", this.humidity);
+            weather_description.put("windSpeed", this.windSpeed);
+            weather_description.put("windDirection", this.windDirection);
             weather_description.put("windCardinalDirection", this.windCardinalDirection);
-            weather_description.put("cloudiness", Double.toString(this.cloudiness));
+            weather_description.put("cloudiness", this.cloudiness);
             weather_description.put("sentence", this.sentence);
             weather_description.put("date", this.date.getTime());
             preferencesEditor.putString(WeatherInfo.weatherKey, weather_description.toString());
@@ -54,6 +56,7 @@ public class WeatherInfo {
         if(weatherStr != null) {
             JSONObject weather_description = new JSONObject(weatherStr);
             WeatherInfo weatherInfo = new WeatherInfo();
+            weatherInfo.temperature = weather_description.getDouble("temperature");
             weatherInfo.humidity = weather_description.getInt("humidity");
             weatherInfo.windSpeed = weather_description.getDouble("windSpeed");
             weatherInfo.windDirection = weather_description.getDouble("windDirection");
@@ -66,15 +69,16 @@ public class WeatherInfo {
         return null;
     }
 
-    public static WeatherInfo creteWeatherInfoFromJson(Context context, JSONObject json) throws JSONException {
+    public static WeatherInfo creteWeatherInfoFromJson(Context context, JSONObject json) throws Exception {
         WeatherInfo weatherInfo = new WeatherInfo();
+        Log.d("WeatherInfo", json.toString());
         JSONObject data = json.getJSONObject("data");
-        JSONObject forecast = json.getJSONObject("forecast");
+        JSONObject forecast = data.getJSONObject("forecast");
         weatherInfo.humidity = forecast.getInt("humidity");
         weatherInfo.temperature = forecast.getDouble("temperature");
         weatherInfo.windSpeed = forecast.getDouble("wind_speed");
         weatherInfo.windDirection = forecast.getDouble("wind_direction");
-        weatherInfo.windCardinalDirection = forecast.getString("wind_cardinal_direction");
+        weatherInfo.windCardinalDirection = new String(forecast.getString("wind_cardinal_direction").getBytes("UTF-8"));
         weatherInfo.cloudiness = forecast.getDouble("cloudiness");
         weatherInfo.sentence = data.getString("sentence");
         weatherInfo.date = new Date();
@@ -116,5 +120,19 @@ public class WeatherInfo {
 
     public Date getDate() {
         return date;
+    }
+
+    @Override
+    public String toString() {
+        return "WeatherInfo{" +
+                "humidity=" + humidity +
+                ", windSpeed=" + windSpeed +
+                ", windDirection=" + windDirection +
+                ", windCardinalDirection='" + windCardinalDirection + '\'' +
+                ", cloudiness=" + cloudiness +
+                ", temperature=" + temperature +
+                ", sentence='" + sentence + '\'' +
+                ", date=" + date +
+                '}';
     }
 }

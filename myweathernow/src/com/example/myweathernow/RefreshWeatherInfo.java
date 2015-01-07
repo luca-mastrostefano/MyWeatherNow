@@ -10,18 +10,20 @@ import com.example.myweathernow.persistency.WeatherInfo;
  */
 public class RefreshWeatherInfo extends AsyncTask<Void, WeatherInfo, WeatherInfo> {
 
-    private Context context;
+    private MWNhome homeActivity;
 
-    public RefreshWeatherInfo(Context context){
-        this.context = context;
+    public RefreshWeatherInfo(MWNhome homeActivity){
+        this.homeActivity = homeActivity;
     }
 
     @Override
     protected WeatherInfo doInBackground(Void... voids) {
         APIManager apiManager = new APIManager();
-
-        //apiManager.getWeatherInfo(context, location);
-        return null;
+        try {
+            return apiManager.getWeatherInfo(this.homeActivity, null);
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
@@ -31,7 +33,9 @@ public class RefreshWeatherInfo extends AsyncTask<Void, WeatherInfo, WeatherInfo
 
     @Override
     protected void onPostExecute(WeatherInfo result) {
-
+        if(result != null){
+            this.homeActivity.refreshUI(result);
+        }
     }
 
 }

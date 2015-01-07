@@ -51,10 +51,9 @@ public class APIManager {
 
             }
         } catch (final Exception e) {
-            Log.d("APIManager", "can't perform API call");
             e.printStackTrace();
-            throw new Exception("Can't perform API call");
         }
+        Log.d("APIManager", "can't perform API call");
         throw new Exception("Can't perform API call");
     }
 
@@ -64,9 +63,13 @@ public class APIManager {
         if(userID.isValid()) {
             params.setLongParameter("userid", userID.getUserID());
         }
-        params.setDoubleParameter("latitude", location.getLatitude());
-        params.setDoubleParameter("longitude", location.getLongitude());
+        if(location != null) {
+            params.setDoubleParameter("latitude", location.getLatitude());
+            params.setDoubleParameter("longitude", location.getLongitude());
+        }
+        params.setLongParameter("date", System.currentTimeMillis());
         getRequest.setParams(params);
+        getRequest.addHeader("Cache-Control", "no-cache");
         return getRequest;
     }
 

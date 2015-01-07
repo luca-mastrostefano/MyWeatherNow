@@ -40,16 +40,16 @@ public class SynchService extends IntentService implements LocationListener {
     public void onLocationChanged(Location currentLocation) {
         Log.i("location service", "Latitude: " + currentLocation.getLatitude());
         Log.i("location service", "Logitude: " + currentLocation.getLongitude());
+        boolean showNotification = this.locDetector.addLocationToHistory(currentLocation);
         try {
             WeatherInfo weatherInfo = new APIManager().getWeatherInfo(this, currentLocation);
+            if(showNotification){
+                notificationHand.show(weatherInfo);
+            } else{
+                notificationHand.hide();
+            }
         }catch(Exception e){
 
-        }
-        boolean showNotification = this.locDetector.addLocationToHistory(currentLocation);
-        if(showNotification){
-            notificationHand.show("Notifica Creata/Aggiornata");
-        } else{
-            notificationHand.hide();
         }
 
     }

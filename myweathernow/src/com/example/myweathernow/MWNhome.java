@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 
 public class MWNhome extends Activity {
 
-    private static final DateFormat dateFormatter = new SimpleDateFormat("EEE, d MMM");
+    private static final DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM");
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,7 +24,8 @@ public class MWNhome extends Activity {
         setContentView(R.layout.main);
         Log.i("MWNhome", "Entrato nella home");
         if(this.isFirstStart()){
-            AlarmReceiver.register(this);
+            Log.e("MWNhome","Alarm disabled!");
+            //AlarmReceiver.register(this);
         }
         try {
             WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());
@@ -34,24 +35,27 @@ public class MWNhome extends Activity {
         } catch (JSONException e) {
             //Cant get weatherInfo
         }
-
+        RefreshWeatherInfo refreshWeatherInfo = new RefreshWeatherInfo(this);
+        refreshWeatherInfo.execute();
     }
 
     public void refreshUI(WeatherInfo weatherInfo){
+        Log.i("MWNhome", weatherInfo.toString());
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
-        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
-        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity());
-        ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(weatherInfo.getTemperature()));
-        ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(weatherInfo.getWindSpeed()) + " [m/s] " + weatherInfo.getWindCardinalDirection());
-        ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()));
+        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity() + "%");
+        ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(Math.ceil(weatherInfo.getTemperature() - 273.15)) + "°");
+        ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(Math.round(weatherInfo.getWindSpeed()*10)/10) + "[m/s] " + weatherInfo.getWindCardinalDirection());
+        ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()) + "%");
+        ((TextView) this.findViewById(R.id.weather_suggestion)).setText(weatherInfo.getSentence());
     }
 
     private boolean isFirstStart(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String firstStart = "first_start";
         boolean isFirstStart = sharedPreferences.getBoolean(firstStart, true);
-        if(isFirstStart){
+        Log.e("MWNhome","SharedPreferences firstStart disabled!");
+        if(isFirstStart && false){
             final SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
             preferencesEditor.putBoolean(firstStart, false);
             preferencesEditor.commit();
