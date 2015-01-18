@@ -1,0 +1,44 @@
+body{
+    background: url('../img/landing.jpg');
+    background-size: cover;
+    padding: 20px 0;
+    font-family: Helvetica, sans-serif;
+}
+
+button[type="submit"]{
+    background: #ff8000;
+    color: #eee;
+}
+
+h1{
+    color: #eee;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+img{
+    margin: 0 50px;
+}
+
+p{
+    font-size: 1.4em;
+    color: #405058;
+    line-height: 1.8em;
+    padding-top: 10px;
+}
+
+#phone_img{
+    width: 312px;
+    height: 600px;
+}
+
+#getintouch,
+#getintouch + span{
+    color: #ff8000;
+}
+
+.copyright{
+    margin-top: 30px;
+    text-align: center;
+}
+

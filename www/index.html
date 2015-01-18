@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<div class="container">
+    <div class=" body-container">
+<div class="row">
+    <div class="header-container">
+        <div class="content-panel" wp-editable="content" wp-content-panel="sc.contents.heading">
+
+            <h1 class="heading"><span style="font-size:32px;">&nbsp;</span></h1>
+
+        </div>
+    </div>
+    <div class="col-sm-6 col-sm-offset-1">
+        <div class="header-container">
+            <div class="content-panel" wp-editable="content" wp-content-panel="sc.contents.heading">
+
+                    <h1 class="heading"><span style="font-size:45px;">&nbsp;</span></h1>
+
+            </div>
+        </div>
+        <div class="header-container">
+            <div class="content-panel" wp-editable="content" wp-content-panel="sc.contents.heading">
+                <div>
+                    <h1 class="heading"><span style="font-size:62px;">Think big. More.</span></h1>
+                </div>
+            </div>
+        </div>
+        <div class="ipsum-container">
+            <div class="content-panel" wp-editable="content" wp-content-panel="sc.contents.paragraph">
+                <div>
+                    <p class="paragraph" data-wp-editor-menu-active="true"><span style="color:#cccccc;">Lorem ipsum dolor sit amet, id est adversarium, aliquip admodum pri an. Mei no luck graeci disputando, eu sed essent aperiri. Sed no go dico debet together tantas. Sed et ullum bicycle intellegebat, te solet evin romanchuk we gloriatur sea, ad natum saepe liberavisse sea.</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="form-container">
+            <form id="participation" novalidate="" role="form" class="form">
+                <!-- ngIf: editable && sc.supports_participation_editor -->
+                <div id="participation-editor" wp-participation-faker="true"></div>
+                <!-- end ngIf: editable && sc.supports_participation_editor -->
+                <div id="contest" wp-contest="true">
+                    <div wp-ledger-panel="sc.ledger" editable="editable">
+                        <div class="ledger-panel" wp-ledger="sc.ledger" form="participation">
+                            <!-- TODO: Remove the stuff that is specific to the participation editor (control.hovered, etc) -->
+                            <!--   and have the participation editor apply it itself in the linker. -->
+                            <!-- ngRepeat: control in ledger.controls | orderBy:'position' -->
+                            <div class="form-group">
+                                <label class="control-label">
+  <span id="getintouch">
+    Get in touch with us
+  </span>
+                                    <span class="required">*</span>
+                                </label>
+                                <input class="form-control"
+                                       type="email" name="email" control-type="email" required="required"
+                                       style="border-color: rgb(131, 135, 138); color: rgb(51, 51, 51); background-color: rgb(255, 255, 255);">
+                                <!-- ngIf: control.character_counter -->
+                            </div>
+                            <!-- end ngRepeat: control in ledger.controls | orderBy:'position' -->
+                            <div class="form-group">
+                                <button class="btn btn-large" type="submit">
+                                    Partecipa
+                                </button>
+                            </div>
+                            <!-- end ngRepeat: control in ledger.controls | orderBy:'position' --></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="col-sm-5">
+
+        <div class="image-container">
+            <div class="content-panel">
+                <img src="https://s3.amazonaws.com/media.wishpond.com/media/003/726/557/original.png?1421580151" id="phone_img"></div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12">
+        <div class="footer">
+            <div class="copyright-container">
+                <div class="content-panel">
+                    <div class="copyright">
+                        SiamoFichissimi - © Copyright 2014 - All rights reserved.
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+</body>
+</html>
