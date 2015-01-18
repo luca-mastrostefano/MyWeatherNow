@@ -2,13 +2,14 @@
 /**
  * Created by PhpStorm.
  * User: Roberto
- * Date: 04/01/15
- * Time: 15.57
+ * Date: 17/01/15
+ * Time: 10.07
  */
+
 header('Content-Type: application/json; charset=utf-8');
 
-include "Autoloader.php";
+include "../Autoloader.php";
 
-$forecast = new \core\Forecast();
+$forecast = new rain\Forecast();
 $forecast->doAction();
 echo json_encode( $forecast->getResponse() );
