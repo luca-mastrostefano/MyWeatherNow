@@ -13,29 +13,30 @@ class Forecast
 
     private $id;
 
+    private $type;
+
     private $con;
 
     private $response;
+
+    private static $allowed_actions = array('overview', 'detailed');
 
     const TABLE_PREFIX = "myweathernow_";
 
     public function __construct()
     {
-        $filterArgs = array('id' => array('filter' => FILTER_SANITIZE_NUMBER_INT));
+        date_default_timezone_set("Europe/Rome");
+        $filterArgs = array(
+            'id' => array(
+                'filter' => FILTER_SANITIZE_NUMBER_INT),
+            'type' => array(
+                'filter' => FILTER_SANITIZE_STRING)
+        );
 
         $getInput = filter_input_array(INPUT_GET, $filterArgs);
 
         $this->id = $getInput['id'];
-
-//        if (empty($this->id)) {
-//            $register = new Register();
-//            $register->doAction();
-//            $response = $register->getResponse();
-//
-//            $this->id = $response['id'];
-//        }
-
-//        $this->con = Connection::getInstance()->getCon();
+        $this->type = $getInput['type'];
 
         $this->response = array(
             "status" => 200,
@@ -49,104 +50,67 @@ class Forecast
                 ),
                 "sentence" => null,
                 "id" => $this->id
-            )
+            ),
+            "message" => null
         );
-
     }
 
-    public function doAction(){
+    public function doAction()
+    {
+        if (!in_array($this->type, self::$allowed_actions)) {
+            $this->response['status'] = 400;
+            $this->response['message'] = "Action not allowed";
+            return;
+        }
 
-        //get today's data
-//        $cachedForecast = $this->getForecastFromCache();
-        $cache_hit = false;
-//        if ( 0 && count($cachedForecast) > 0) {
-//            $cache_hit = true;
-//            $forecastData = $cachedForecast[0];
-//
-//            $temperature = $forecastData['temperature'];
-//            $humidity = $forecastData['humidity'];
-//            $wind = $forecastData['wind'];
-//            $wind_dir = $forecastData['wind_dir'];
-//            $cloudiness = $forecastData['cloudiness'];
-//        } else {
-            $forecastData = $this->getDataFromForecastIO();
+        $forecastData = $this->getDataFromForecastIO();
 
-            if ($forecastData == null) {
-                $this->response['status'] = 500;
-                return;
-            }
+        if ($forecastData == null) {
+            $this->response['status'] = 500;
+            return;
+        }
 
-        //convert temperature to kelvin
-        $forecastData['currently']['temperature'] = self::fToKelvin($forecastData['currently']['temperature']);
-        $forecastData['currently']['apparentTemperature'] = self::fToKelvin($forecastData['currently']['apparentTemperature']);
-        $this->response = $forecastData['currently'];
-//        }
+        $forecastData = $this->formatResponse($forecastData);
 
-//        $yesterday_data = $this->getYesterdaysData();
-//        $sentence = SentenceMaker::makeSentence(
-//            $yesterday_data,
-//            array(
-//                'temp' => $temperature,
-//                'humidity'=> $humidity,
-//                'wind_speed' => $wind,
-//                'wind_dir' => $wind_dir,
-//                'cloudiness' => $cloudiness
-//            )
-//        );
-//
-//        $this->response['data']['forecast']['temperature'] = $temperature;
-//        $this->response['data']['forecast']['humidity'] = $humidity;
-//        $this->response['data']['forecast']['wind_speed'] = $wind;
-//        $this->response['data']['forecast']['wind_direction'] = $wind_dir;
-//        $this->response['data']['forecast']['wind_cardinal_direction'] = SentenceMaker::windDegreesToDirection($wind_dir);
-//        $this->response['data']['forecast']['cloudiness'] = $cloudiness;
-//        $this->response['data']['sentence'] = utf8_encode($sentence);
-//
-//        if (!$cache_hit) {
-//            $this->storeForecastData(
-//                array(
-//                    'city' => "Rome",
-//                    'temp' => $temperature,
-//                    'hum' => $humidity,
-//                    'wind' => $wind,
-//                    'w_dir' => $wind_dir,
-//                    'rain' => 0,
-//                    'cloudiness' => $cloudiness
-//                )
-//            );
-//        }
+        $this->response = $forecastData;
     }
 
-    private function getYesterdaysData(){
+    private function getYesterdaysData()
+    {
         //get yesterday's data
         $yesterday_data = $this->getForecastFromCache('yesterday');
-        if(count($yesterday_data) > 0 ){
+        if (count($yesterday_data) > 0) {
             $yesterday_data = $yesterday_data[0];
 
             return array(
                 'temp' => $yesterday_data['temperature'],
-                'humidity'=> $yesterday_data['humidity'],
+                'humidity' => $yesterday_data['humidity'],
                 'wind_speed' => $yesterday_data['wind'],
                 'wind_dir' => $yesterday_data['wind_dir'],
                 'cloudiness' => $yesterday_data['cloudiness']
             );
-        }
-        else{
+        } else {
             $yesterday_data = null;
         }
         return $yesterday_data;
     }
 
-    private function getForecastFromCache($when = 'today'){
-        switch($when){
-            case 'today'    : $sql_date = 'now()'; break;
-            case 'yesterday': $sql_date = 'date_sub(now(), interval 1 day )'; break;
+    private function getForecastFromCache($when = 'today')
+    {
+        switch ($when) {
+            case 'today'    :
+                $sql_date = 'now()';
+                break;
+            case 'yesterday':
+                $sql_date = 'date_sub(now(), interval 1 day )';
+                break;
             default :
-                $sql_date = 'now()'; break;
+                $sql_date = 'now()';
+                break;
         }
 
         $stmt = $this->con->prepare("select * from " . self::TABLE_PREFIX . "forecasts
-                          where date between date_sub(".$sql_date.", interval 10 minute ) and ".$sql_date);
+                          where date between date_sub(" . $sql_date . ", interval 10 minute ) and " . $sql_date);
 
         try {
             $stmt->execute();
@@ -188,8 +152,91 @@ class Forecast
         return $forecastData;
     }
 
-    private static function fToKelvin($temp){
-        return round( ( ($temp - 32) / 1.8 ) + 273.15, 2 );
+    private static function fToKelvin($temp)
+    {
+        return round((($temp - 32) / 1.8) + 273.15, 2);
+    }
+
+    private function formatResponse($response)
+    {
+        $result = array();
+        if($this->type == 'overview'){
+            $morningData    = array(
+                'prob' => 0,
+                'intensity' => 0
+            );
+            $afternoonData  = array();
+            $eveningData    = array();
+            $nightData      = array();
+
+            //evaluate avg values for 6 hour periods
+            foreach($response['hourly']['data'] as $hourData){
+                $hour = intval(date("G",$hourData['time']));
+                if ($hour >= 0 && $hour > 6 ) {
+                    $nightData['prob'] += $hourData['precipProbability'];
+                    $nightData['intensity'] += $hourData['precipIntensity'];
+                }
+                else if( $hour >= 6 && $hour < 12 ){
+                    $morningData['prob'] += $hourData['precipProbability'];
+                    $morningData['intensity'] += $hourData['precipIntensity'];
+                }
+                else if( $hour >= 12 && $hour < 18 ){
+                    $afternoonData['prob'] += $hourData['precipProbability'];
+                    $afternoonData['intensity'] += $hourData['precipIntensity'];
+                }
+                else if( $hour >= 18 && $hour < 24 ){
+                    $eveningData['prob'] += $hourData['precipProbability'];
+                    $eveningData['intensity'] += $hourData['precipIntensity'];
+                }
+            }
+
+            $morningData['prob'] /= 6;
+            $morningData['intensity'] /= 6;
+            $afternoonData['prob'] /= 6;
+            $afternoonData['intensity'] /= 6;
+            $eveningData['prob'] /= 6;
+            $eveningData['intensity'] /= 6;
+            $nightData['prob'] /= 6;
+            $nightData['intensity'] /= 6;
+
+            $result = array(
+                'now' => array(
+                    'rainProb' => $response['currently']['precipProbability'],
+                    'rainIntensity' => $response['currently']['precipIntensity'],
+                ),
+                'nexthour' => array(
+                    'rainProb' => $response['hourly']['data'][0]['precipProbability'],
+                    'rainIntensity' => $response['hourly']['data'][0]['precipIntensity'],
+                ),
+                'morning' => array(
+                    'rainProb' => round($morningData['prob'],2),
+                    'rainIntensity' => round($morningData['intensity'],4),
+                ),
+                'afternoon' => array(
+                    'rainProb' => round($afternoonData['prob'],2),
+                    'rainIntensity' => round($afternoonData['intensity'],4),
+                ),
+                'evening' => array(
+                    'rainProb' => round($eveningData['prob'],2),
+                    'rainIntensity' => round($eveningData['intensity'],4),
+                ),
+                'night' => array(
+                    'rainProb' => round($nightData['prob'],2),
+                    'rainIntensity' => round($nightData['intensity'],4),
+                )
+            );
+        }
+        else {
+            for( $i = 0; $i < 6; $i++){
+                $hourData = $response['hourly']['data'][$i];
+                $result[ $hourData['time'] ] = array(
+                    'rainProb'      => round( $hourData['precipProbability'], 2 ),
+                    'rainIntensity' => round( $hourData['precipIntensity'],   4 ),
+                );
+            }
+        }
+
+        return $result;
     }
 
     /**
