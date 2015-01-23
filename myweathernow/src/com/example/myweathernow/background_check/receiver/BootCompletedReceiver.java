@@ -8,7 +8,7 @@ package com.example.myweathernow.background_check.receiver;
 
 import android.content.*;
 import android.util.*;
-import com.example.myweathernow.background_check.receiver.*;
+import com.example.myweathernow.background_check.service.*;
 
 public class BootCompletedReceiver extends BroadcastReceiver {
 
@@ -17,7 +17,8 @@ public class BootCompletedReceiver extends BroadcastReceiver {
         if (bootIntent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
             // ricevo la notifica di boot completo e setto l'alarm per il futuro
             Log.i("boot receiver", "boot received");
-            AlarmReceiver.register(context);
+            Intent intent = new Intent(context, LocationService.class);
+            context.startService(intent);
         }
     }
 }

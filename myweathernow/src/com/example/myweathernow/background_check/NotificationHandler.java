@@ -24,11 +24,12 @@ public class NotificationHandler {
 
     public void show(WeatherInfo weatherInfo) {
         mBuilder.setSmallIcon(R.drawable.weather_sample);
-        mBuilder.setContentText(weatherInfo.getSentence());
+//        mBuilder.setContentText(weatherInfo.getSentence());
+        mBuilder.setContentText("ciaone!");
         Intent openAppIntent = new Intent(this.c, MWNhome.class);
         PendingIntent openAppPendingIntent = PendingIntent.getActivity(this.c, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.setContentIntent(openAppPendingIntent);
-        mBuilder.setAutoCancel(false);
+        mBuilder.setOngoing(true);
         mNotificationManager.notify(notificationID, mBuilder.build());
 
     }

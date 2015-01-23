@@ -6,7 +6,7 @@ import android.os.*;
 import android.preference.*;
 import android.util.*;
 import android.widget.*;
-import com.example.myweathernow.background_check.test.*;
+import com.example.myweathernow.background_check.service.*;
 import com.example.myweathernow.persistency.*;
 import org.json.*;
 
