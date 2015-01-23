@@ -4,9 +4,7 @@ import android.app.*;
 import android.content.*;
 import android.location.*;
 import android.os.*;
-import android.preference.PreferenceManager;
 import android.util.*;
-import com.example.myweathernow.persistency.UserLocation;
 import com.example.myweathernow.persistency.WeatherInfo;
 
 /**

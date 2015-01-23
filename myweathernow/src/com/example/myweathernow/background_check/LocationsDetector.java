@@ -2,42 +2,45 @@ package com.example.myweathernow.background_check;
 
 import android.content.*;
 import android.location.*;
+import android.util.*;
 import com.example.myweathernow.persistency.*;
 
 /**
  * Created by lucamastrostefano on 04/01/15.
  */
 public class LocationsDetector {
-    private final UserLocation tempLoc;
+    private final UserLocationHandler userLocationHandler;
 
     public LocationsDetector(Context c) {
-        this.tempLoc = new UserLocation(c);
+        this.userLocationHandler = new UserLocationHandler(c);
     }
 
     public boolean addLocationToHistory(Location currentLocation) {
         boolean showNotification = false;
-        // first time
-        if (!this.tempLoc.hasLocation()) {
-            this.tempLoc.setLocation(currentLocation);
+        // first time - se non ha la location è perchè ho appena isntallato l'app
+        if (!this.userLocationHandler.hasLocation()) {
+            this.userLocationHandler.setLocation(currentLocation);
             showNotification = true;
         } else {
-            Location oldLoc = this.tempLoc.getLastLocation();
+            Location oldLocation = this.userLocationHandler.getLastLocation();
             // due location sono diverse se distanti più di 200m
-            if (currentLocation.distanceTo(oldLoc) >= 200) {
-                // controllo quanto valeva l'ultimo ping
-                int oldPing = this.tempLoc.getLastPing();
-                if (oldPing >= 6) {
-                    showNotification = false;
-                }
+            if (currentLocation.distanceTo(oldLocation) >= 250) {
+                Log.i("si è spostato di", ""+currentLocation.distanceTo(oldLocation));
+                Log.i("prima location", "" + oldLocation.getLatitude() + " " + oldLocation.getLongitude());
+                Log.i("seconda location", "" + currentLocation.getLatitude() + " " + currentLocation.getLongitude());
+                showNotification = false;
                 // salvo l'ultima come corrente
-                this.tempLoc.setLocation(currentLocation);
+                this.userLocationHandler.setLocation(currentLocation);
             } else {
                 // distanza < 200m, approssimiamo a stessa location
                 // aggiorno quella di prima aumentando il ping
-                int updatedPing = this.tempLoc.updateLocation();
-                if (updatedPing >= 6) {
+                int updatedPing = this.userLocationHandler.increasePing();
+                Log.i("è fermo da ", ""+updatedPing);
+                if (updatedPing >= 3) {
                     showNotification = true;
                     // TODO se ping >= 6 aggiungo al db come location importante
+                }else{
+                    showNotification = false;
                 }
             }
 

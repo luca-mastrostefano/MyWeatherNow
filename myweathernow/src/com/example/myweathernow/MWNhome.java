@@ -1,18 +1,16 @@
 package com.example.myweathernow;
 
 import android.app.*;
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.*;
-import android.preference.PreferenceManager;
+import android.preference.*;
 import android.util.*;
-import android.widget.TextView;
-import com.example.myweathernow.background_check.receiver.*;
-import com.example.myweathernow.persistency.WeatherInfo;
-import org.json.JSONException;
+import android.widget.*;
+import com.example.myweathernow.background_check.test.*;
+import com.example.myweathernow.persistency.*;
+import org.json.*;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.text.*;
 
 public class MWNhome extends Activity {
 
@@ -23,9 +21,14 @@ public class MWNhome extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         Log.i("MWNhome", "Entrato nella home");
+        Log.i("Thread Home", ""  + Thread.currentThread().getId());
         if(this.isFirstStart()){
-            Log.e("MWNhome","Alarm disabled!");
-            //AlarmReceiver.register(this);
+            Log.e("MWNhome","Service not started, let's start it now!");
+            Intent intent = new Intent(this, LocationService.class);
+            startService(intent);
+        }else{
+            Intent intent = new Intent(this, LocationService.class);
+            startService(intent);
         }
         try {
             WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());
@@ -54,8 +57,9 @@ public class MWNhome extends Activity {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         String firstStart = "first_start";
         boolean isFirstStart = sharedPreferences.getBoolean(firstStart, true);
-        Log.e("MWNhome","SharedPreferences firstStart disabled!");
-        if(isFirstStart && false){
+//        Log.e("MWNhome","SharedPreferences firstStart disabled!");
+//        if(isFirstStart && false){
+        if(isFirstStart){
             final SharedPreferences.Editor preferencesEditor = sharedPreferences.edit();
             preferencesEditor.putBoolean(firstStart, false);
             preferencesEditor.commit();
