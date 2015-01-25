@@ -3,7 +3,7 @@ package com.example.myweathernow.background_check;
 import android.content.Context;
 import android.location.Location;
 import android.util.Log;
-import com.example.myweathernow.persistency.WeatherInfo;
+import com.example.myweathernow.persistency.WeatherManager;
 import com.example.myweathernow.persistency.UserID;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -13,7 +13,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
@@ -28,19 +27,19 @@ public class APIManager {
         OVERVIEW,
         DETAILED;
     }
-    public static enum WHEN{
+    public static enum When {
         TODAY,
         TOMORROW;
     }
     private InformationType informationType;
-    private WHEN when;
+    private When when;
 
-    public APIManager(InformationType informationType, WHEN when){
+    public APIManager(InformationType informationType, When when){
         this.informationType = informationType;
         this.when = when;
     }
 
-    public WeatherInfo getWeatherInfo(Context context, Location location) throws Exception{
+    public WeatherManager getWeatherInfo(Context context, Location location) throws Exception{
         Log.d("APIManager", "start");
         try {
             UserID userID = UserID.getInstance(context);
@@ -61,7 +60,7 @@ public class APIManager {
                     if(!userID.isValid()){
                         userID.storeUserID(data.getLong("id"));
                     }
-                    return WeatherInfo.creteWeatherInfoFromJson(context, jsonResponse);
+                    return WeatherManager.creteWeatherManagerFromJson(context, jsonResponse);
                 }
 
             }

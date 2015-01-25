@@ -40,10 +40,11 @@ public class AsyncLocationTask extends AsyncTask <Location, Void, Void>{
         boolean showNotification = locDetector.addLocationToHistory(currentLocation);
         try {
             if(isNetworkAvailable()){
-                WeatherInfo weatherInfo = new APIManager().getWeatherInfo(context, currentLocation);
+                APIManager apiManager = new APIManager(APIManager.InformationType.OVERVIEW, APIManager.When.TODAY);
+                WeatherManager weatherManager = apiManager.getWeatherInfo(context, currentLocation);
                 if(showNotification){
                     Log.i("Notification", "mostrata notifica");
-                    notificationHand.show(weatherInfo);
+                    notificationHand.show(weatherManager);
                 } else{
                     Log.i("Notification", "tolta notifica");
                     notificationHand.hide();

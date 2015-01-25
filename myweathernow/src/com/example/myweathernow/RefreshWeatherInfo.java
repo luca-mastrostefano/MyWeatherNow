@@ -1,14 +1,13 @@
 package com.example.myweathernow;
 
-import android.content.Context;
 import android.os.AsyncTask;
 import com.example.myweathernow.background_check.APIManager;
-import com.example.myweathernow.persistency.WeatherInfo;
+import com.example.myweathernow.persistency.WeatherManager;
 
 /**
  * Created by lucamastrostefano on 06/01/15.
  */
-public class RefreshWeatherInfo extends AsyncTask<Void, WeatherInfo, WeatherInfo> {
+public class RefreshWeatherInfo extends AsyncTask<Void, WeatherManager, WeatherManager> {
 
     private MWNhome homeActivity;
 
@@ -17,8 +16,8 @@ public class RefreshWeatherInfo extends AsyncTask<Void, WeatherInfo, WeatherInfo
     }
 
     @Override
-    protected WeatherInfo doInBackground(Void... voids) {
-        APIManager apiManager = new APIManager(APIManager.InformationType.OVERVIEW, APIManager.WHEN.TODAY);
+    protected WeatherManager doInBackground(Void... voids) {
+        APIManager apiManager = new APIManager(APIManager.InformationType.DETAILED, APIManager.When.TODAY);
         try {
             return apiManager.getWeatherInfo(this.homeActivity, null);
         } catch (Exception e) {
@@ -27,12 +26,12 @@ public class RefreshWeatherInfo extends AsyncTask<Void, WeatherInfo, WeatherInfo
     }
 
     @Override
-    protected void onProgressUpdate(WeatherInfo... values) {
+    protected void onProgressUpdate(WeatherManager... values) {
 
     }
 
     @Override
-    protected void onPostExecute(WeatherInfo result) {
+    protected void onPostExecute(WeatherManager result) {
         if(result != null){
             this.homeActivity.refreshUI(result);
         }
