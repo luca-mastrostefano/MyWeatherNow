@@ -31,9 +31,9 @@ public class MWNhome extends Activity {
             startService(intent);
         }
         try {
-            WeatherInfo weatherInfo = WeatherInfo.getLast(this.getApplicationContext());
-            if(weatherInfo != null) {
-                this.refreshUI(weatherInfo);
+            WeatherManager weatherManager = WeatherManager.getLast(this.getApplicationContext());
+            if(weatherManager != null) {
+                this.refreshUI(weatherManager);
             }
         } catch (JSONException e) {
             //Cant get weatherInfo
@@ -42,15 +42,15 @@ public class MWNhome extends Activity {
         refreshWeatherInfo.execute();
     }
 
-    public void refreshUI(WeatherInfo weatherInfo){
-        Log.i("MWNhome", weatherInfo.toString());
+    public void refreshUI(WeatherManager weatherManager){
+        Log.i("MWNhome", weatherManager.toString());
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
-        ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherInfo.getDate()));
-        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherInfo.getHumidity() + "%");
-        ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(Math.ceil(weatherInfo.getTemperature() - 273.15)) + "°");
-        ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(Math.round(weatherInfo.getWindSpeed()*10)/10) + "[m/s] " + weatherInfo.getWindCardinalDirection());
-        ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherInfo.getCloudiness()) + "%");
-        ((TextView) this.findViewById(R.id.weather_suggestion)).setText(weatherInfo.getSentence());
+        ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
+        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherManager.getHumidity() + "%");
+        ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(Math.ceil(weatherManager.getTemperature() - 273.15)) + "°");
+        ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(Math.round(weatherManager.getWindSpeed()*10)/10) + "[m/s] " + weatherManager.getWindCardinalDirection());
+        ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherManager.getCloudiness()) + "%");
+        ((TextView) this.findViewById(R.id.weather_suggestion)).setText(weatherManager.getSentence());
     }
 
     private boolean isFirstStart(){

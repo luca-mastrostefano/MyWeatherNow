@@ -148,7 +148,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return values;
     }
 
-    //    private ContentValues createValuesFromMeteo(final WeatherInfo meteo) {
+    //    private ContentValues createValuesFromMeteo(final WeatherManager meteo) {
 //        final ContentValues values = new ContentValues();
 //        values.put(DatabaseManager.KEY_LATITUDE, site.getPageName());
 //        values.put(DatabaseManager.KEY_URL, site.getUrl());
