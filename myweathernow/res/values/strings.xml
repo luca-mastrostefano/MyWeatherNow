@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">My Weather Now</string>
+    <string name="location_name">Roma</string>
+    <string name="date">Dom, 25 Gen</string>
+    <string name="umbrella_suggestion">Prendi l'ombrello!</string>
+    <string name="rain_probabiloty_title">Probabilità</string>
+    <string name="rain_intensity_title">Intensità</string>
+    <string name="rain_probabiloty_value">85%</string>
+    <string name="rain_intensity_value">20mm</string>
+    <string name="morning">6:00</string>
+    <string name="noon">12:00</string>
+    <string name="evening">18:00</string>
+    <string name="night">0:00</string>
+    <string name="button_today">OGGI</string>
+    <string name="button_tomorrow">DOMANI</string>
+
+
 </resources>

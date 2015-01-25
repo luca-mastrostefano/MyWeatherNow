@@ -26,14 +26,17 @@
             <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="TODAY"
-                    android:id="@+id/button"
-                    android:layout_weight="0.5"/>
+                    android:text="@string/button_today"
+                    android:id="@+id/button_today"
+                    android:layout_weight="0.5"
+                    android:background="@android:color/transparent"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"/>
             <Button
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="TOMORROW"
-                    android:id="@+id/button2"
+                    android:text="@string/button_tomorrow"
+                    android:id="@+id/button_tomorrow"
                     android:layout_weight="0.5"/>
         </LinearLayout>
         <LinearLayout
@@ -47,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:text="Rome"
+                    android:text="@string/location_name"
                     android:id="@+id/location"
                     android:layout_gravity="right"
                     android:textStyle="bold"
@@ -58,14 +61,14 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_marginRight="20dp"
-                    android:text="Saturday, Jan 25"
+                    android:text="@string/date"
                     android:id="@+id/textView2"
                     android:layout_gravity="right"
                     android:textStyle="bold"
                     android:textColor="#ffffff"/>
             <ImageView
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:id="@+id/imageView"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/umbrella"
@@ -74,10 +77,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:text="Take the umbrella!"
+                    android:text="@string/umbrella_suggestion"
                     android:id="@+id/rain_suggestion"
                     android:layout_gravity="center_horizontal"
-                    android:textColor="#ff010101"/>
+                    android:textColor="#ffffffff"/>
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -89,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Probability"
+                        android:text="@string/rain_probabiloty_title"
                         android:id="@+id/rain_percentage"
                         android:gravity="center"
                         android:textStyle="bold"
@@ -98,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Intensity"
+                        android:text="@string/rain_intensity_title"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:id="@+id/rain_intensity"
@@ -115,7 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="85%"
+                        android:text="@string/rain_probabiloty_value"
                         android:id="@+id/rain_percentage_value"
                         android:gravity="center"
                         android:textStyle="bold"
@@ -124,7 +127,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="20mm"
+                        android:text="@string/rain_intensity_value"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:id="@+id/rain_intensity_value"
@@ -149,8 +152,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="6:00"
-                        android:id="@+id/textView"
+                        android:text="@string/morning"
+                        android:id="@+id/morning_hour"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:layout_weight="0.25"/>
@@ -158,8 +161,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="12:00"
-                        android:id="@+id/textView3"
+                        android:text="@string/noon"
+                        android:id="@+id/noon_hour"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:layout_weight="0.25"/>
@@ -167,8 +170,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="18:00"
-                        android:id="@+id/textView4"
+                        android:text="@string/evening"
+                        android:id="@+id/evening_hour"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:layout_weight="0.25"/>
@@ -176,8 +179,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="0:00"
-                        android:id="@+id/textView5"
+                        android:text="@string/night"
+                        android:id="@+id/night_hour"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:layout_weight="0.25"/>
