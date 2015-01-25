@@ -7,7 +7,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:id="@+id/background"
-            android:src="@drawable/sky"
+            android:src="@drawable/rainy_day"
             android:scaleX="1.5"
             android:scaleY="2"/>
 
@@ -20,24 +20,31 @@
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.0"
+            android:layout_weight="0.05"
             android:weightSum="1">
 
             <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:text="@string/button_today"
                     android:id="@+id/button_today"
                     android:layout_weight="0.5"
                     android:background="@android:color/transparent"
                     android:textColor="#ffffff"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
             <Button
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="fill_parent"
                     android:text="@string/button_tomorrow"
                     android:id="@+id/button_tomorrow"
-                    android:layout_weight="0.5"/>
+                    android:layout_weight="0.5"
+                    android:background="#80FFFFFF"
+                    android:textColor="#ff0c2c46"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:textAppearance="?android:attr/textAppearanceMedium"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="vertical"
@@ -55,6 +62,7 @@
                     android:layout_gravity="right"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"/>
             <TextView
                     android:layout_width="wrap_content"
@@ -62,7 +70,7 @@
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_marginRight="20dp"
                     android:text="@string/date"
-                    android:id="@+id/textView2"
+                    android:id="@+id/date"
                     android:layout_gravity="right"
                     android:textStyle="bold"
                     android:textColor="#ffffff"/>
@@ -72,67 +80,17 @@
                     android:id="@+id/imageView"
                     android:layout_gravity="center_horizontal"
                     android:src="@drawable/umbrella"
-                    android:layout_weight="0.7"/>
+                    android:layout_weight="0.9"/>
             <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:text="@string/umbrella_suggestion"
                     android:id="@+id/rain_suggestion"
-                    android:layout_gravity="center_horizontal"
-                    android:textColor="#ffffffff"/>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:weightSum="1">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/rain_probabiloty_title"
-                        android:id="@+id/rain_percentage"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:layout_weight="0.5"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/rain_intensity_title"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:id="@+id/rain_intensity"
-                        android:layout_weight="0.5"/>
-            </LinearLayout>
-            <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp"
-                    android:weightSum="1">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/rain_probabiloty_value"
-                        android:id="@+id/rain_percentage_value"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:layout_weight="0.5"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/rain_intensity_value"
-                        android:gravity="center"
-                        android:textStyle="bold"
-                        android:id="@+id/rain_intensity_value"
-                        android:layout_weight="0.5"/>
-            </LinearLayout>
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="#ffffffff"
+                    android:textStyle="bold"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="vertical"
@@ -147,7 +105,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:weightSum="1"
-                    android:background="#336699">
+                    android:background="#ff0c2c46">
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
