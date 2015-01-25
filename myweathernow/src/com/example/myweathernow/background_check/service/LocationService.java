@@ -48,6 +48,11 @@ public class LocationService extends Service {
 
         public void onLocationChanged(final Location currentLocation) {
             AsyncLocationTask async = new AsyncLocationTask(this.context);
+            if(currentLocation == null) {
+                Log.d("LocationService", "current location e' NULL!!!");
+            }else{
+                Log.d("LocationService", "sei una pippa, ricontrolla...");
+            }
             async.execute(currentLocation);
         }
 

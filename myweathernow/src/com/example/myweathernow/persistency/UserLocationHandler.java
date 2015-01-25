@@ -15,9 +15,11 @@ public class UserLocationHandler {
     private static final String locationKey = "last_location";
     private static final String locationPing = "number_of_ping";
     public static final int PING_THREASHOLD = 3;
+    private DatabaseManager databaseManager;
 
     public UserLocationHandler(Context context) {
         Log.v("UserLocation", context.toString());
+        this.databaseManager = DatabaseManager.getInstance(context);
         this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         this.preferencesEditor = this.sharedPreferences.edit();
     }
@@ -43,11 +45,11 @@ public class UserLocationHandler {
     }
 
     public boolean isKnownLocation(Location location){
-        return false;
+        return this.databaseManager.existNearKnownLocation(location);
     }
 
     public void storeKnownLocation(Location location){
-
+        this.databaseManager.addLocation(location);
     }
 
     public int increasePing(){
@@ -56,9 +58,6 @@ public class UserLocationHandler {
         int newNumberPing = oldNumberPing + 1;
         preferencesEditor.putInt(UserLocationHandler.locationPing, newNumberPing);
         preferencesEditor.commit();
-        if(newNumberPing >= PING_THREASHOLD){
-            this.storeKnownLocation(null);
-        }
         return newNumberPing;
     }
 

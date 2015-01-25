@@ -18,7 +18,7 @@ public class RefreshWeatherInfo extends AsyncTask<Void, WeatherInfo, WeatherInfo
 
     @Override
     protected WeatherInfo doInBackground(Void... voids) {
-        APIManager apiManager = new APIManager();
+        APIManager apiManager = new APIManager(APIManager.InformationType.OVERVIEW, APIManager.WHEN.TODAY);
         try {
             return apiManager.getWeatherInfo(this.homeActivity, null);
         } catch (Exception e) {

@@ -9,7 +9,9 @@ import com.example.myweathernow.persistency.*;
  * Created by lucamastrostefano on 04/01/15.
  */
 public class LocationsDetector {
+
     private final UserLocationHandler userLocationHandler;
+    public static final int DISTANCE_THREASHOLD = 250;
 
     public LocationsDetector(Context c) {
         this.userLocationHandler = new UserLocationHandler(c);
@@ -25,8 +27,8 @@ public class LocationsDetector {
             showNotification = true;
         }else{
             Location oldLocation = this.userLocationHandler.getLastLocation();
-            // due location sono diverse se distanti più di 200m
-            if (currentLocation.distanceTo(oldLocation) >= 250) {
+            // due location sono diverse se distanti più di 250m
+            if (currentLocation.distanceTo(oldLocation) >= DISTANCE_THREASHOLD) {
                 Log.i("si è spostato di", ""+currentLocation.distanceTo(oldLocation));
                 Log.i("prima location", "" + oldLocation.getLatitude() + " " + oldLocation.getLongitude());
                 Log.i("seconda location", "" + currentLocation.getLatitude() + " " + currentLocation.getLongitude());
@@ -41,7 +43,7 @@ public class LocationsDetector {
                 if (updatedPing >= this.userLocationHandler.PING_THREASHOLD) {
                     showNotification = true;
                     this.userLocationHandler.storeKnownLocation(currentLocation);
-                    // TODO se ping >= 6 aggiungo al db come location importante
+                    // TODO se ping >= 3 aggiungo al db come location importante
                 }else{
                     showNotification = false;
                 }
