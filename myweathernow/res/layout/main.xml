@@ -76,37 +76,6 @@
                       android:layout_below="@+id/weather_suggestion"
                       android:weightSum="1"
                 >
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".25"
-                        android:id="@+id/clothes1"
-                        android:layout_alignLeft="@+id/weather_suggestion" android:src="@drawable/cap"
-                        android:layout_marginTop="50dp"/>
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".25"
-                        android:id="@+id/clothes2"
-                        android:src="@drawable/heavy_coat"
-                        android:layout_below="@+id/weather_suggestion" android:layout_toLeftOf="@+id/relativeLayout"
-                        android:layout_marginTop="50dp"/>
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".25"
-                        android:id="@+id/clothes3"
-                        android:src="@drawable/gloves"
-                        android:layout_below="@+id/weather_suggestion" android:layout_toLeftOf="@+id/clothes4"
-                        android:layout_marginTop="50dp"/>
-                <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight=".25"
-                        android:id="@+id/clothes4"
-                        android:src="@drawable/scarf"
-                        android:layout_below="@+id/weather_suggestion"
-                        android:layout_marginTop="50dp"/>
         </LinearLayout>
     <TableLayout
             android:layout_width="fill_parent"
