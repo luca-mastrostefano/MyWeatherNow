@@ -27,16 +27,16 @@ public class APIManager {
         OVERVIEW,
         DETAILED;
     }
-    public static enum When {
+    public static enum Day {
         TODAY,
         TOMORROW;
     }
     private InformationType informationType;
-    private When when;
+    private Day day;
 
-    public APIManager(InformationType informationType, When when){
+    public APIManager(InformationType informationType, Day day){
         this.informationType = informationType;
-        this.when = when;
+        this.day = day;
     }
 
     public WeatherManager getWeatherInfo(Context context, Location location) throws Exception{
@@ -82,7 +82,7 @@ public class APIManager {
             params.setDoubleParameter("longitude", location.getLongitude());
         }
         params.setParameter("type", this.informationType.toString());
-        params.setParameter("when", this.when.toString());
+        params.setParameter("day", this.day.toString());
         params.setLongParameter("date", System.currentTimeMillis());
         getRequest.setParams(params);
         getRequest.addHeader("Cache-Control", "no-cache");
