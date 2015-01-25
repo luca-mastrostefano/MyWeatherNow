@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:layout_weight="1">
+              android:layout_height="match_parent">
     <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
@@ -11,17 +10,180 @@
             android:src="@drawable/sky"
             android:scaleX="1.5"
             android:scaleY="2"/>
-    <RelativeLayout
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:weightSum="1">
+        <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="30">
+            android:layout_weight="0.0"
+            android:weightSum="1">
 
-    </RelativeLayout>
-    <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="70">
+            <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TODAY"
+                    android:id="@+id/button"
+                    android:layout_weight="0.5"/>
+            <Button
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="TOMORROW"
+                    android:id="@+id/button2"
+                    android:layout_weight="0.5"/>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:weightSum="1">
 
-    </RelativeLayout>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Rome"
+                    android:id="@+id/location"
+                    android:layout_gravity="right"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"
+                    android:layout_marginRight="20dp"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:layout_marginRight="20dp"
+                    android:text="Saturday, Jan 25"
+                    android:id="@+id/textView2"
+                    android:layout_gravity="right"
+                    android:textStyle="bold"
+                    android:textColor="#ffffff"/>
+            <ImageView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:layout_gravity="center_horizontal"
+                    android:src="@drawable/umbrella"
+                    android:layout_weight="0.7"/>
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:text="Take the umbrella!"
+                    android:id="@+id/rain_suggestion"
+                    android:layout_gravity="center_horizontal"
+                    android:textColor="#ff010101"/>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="1">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Probability"
+                        android:id="@+id/rain_percentage"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.5"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="Intensity"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:id="@+id/rain_intensity"
+                        android:layout_weight="0.5"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:weightSum="1">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="85%"
+                        android:id="@+id/rain_percentage_value"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.5"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="20mm"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:id="@+id/rain_intensity_value"
+                        android:layout_weight="0.5"/>
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:weightSum="1"
+                android:background="#80FFFFFF">
 
-</LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:weightSum="1"
+                    android:background="#336699">
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="6:00"
+                        android:id="@+id/textView"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.25"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="12:00"
+                        android:id="@+id/textView3"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.25"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="18:00"
+                        android:id="@+id/textView4"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.25"/>
+                <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:text="0:00"
+                        android:id="@+id/textView5"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:layout_weight="0.25"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+</RelativeLayout>
