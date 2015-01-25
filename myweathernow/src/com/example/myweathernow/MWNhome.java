@@ -44,13 +44,14 @@ public class MWNhome extends Activity {
 
     public void refreshUI(WeatherManager weatherManager){
         Log.i("MWNhome", weatherManager.toString());
+        /*
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
         ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherManager.getHumidity() + "%");
         ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(Math.ceil(weatherManager.getTemperature() - 273.15)) + "°");
         ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(Math.round(weatherManager.getWindSpeed()*10)/10) + "[m/s] " + weatherManager.getWindCardinalDirection());
         ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherManager.getCloudiness()) + "%");
-        ((TextView) this.findViewById(R.id.weather_suggestion)).setText(weatherManager.getSentence());
+        ((TextView) this.findViewById(R.id.weather_suggestion)).setText(weatherManager.getSentence());*/
     }
 
     private boolean isFirstStart(){
