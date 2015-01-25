@@ -67,7 +67,7 @@ public class WeatherManager {
         return null;
     }
 
-    public static WeatherManager creteWeatherInfoFromJson(Context context, JSONObject json) throws Exception {
+    public static WeatherManager creteWeatherManagerFromJson(Context context, JSONObject json) throws Exception {
         WeatherManager weatherManager = new WeatherManager();
         Log.d("WeatherManager", json.toString());
         JSONObject data = json.getJSONObject("data");

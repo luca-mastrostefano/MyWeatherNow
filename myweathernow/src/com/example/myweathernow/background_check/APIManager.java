@@ -27,14 +27,14 @@ public class APIManager {
         OVERVIEW,
         DETAILED;
     }
-    public static enum WHEN{
+    public static enum When {
         TODAY,
         TOMORROW;
     }
     private InformationType informationType;
-    private WHEN when;
+    private When when;
 
-    public APIManager(InformationType informationType, WHEN when){
+    public APIManager(InformationType informationType, When when){
         this.informationType = informationType;
         this.when = when;
     }
@@ -60,7 +60,7 @@ public class APIManager {
                     if(!userID.isValid()){
                         userID.storeUserID(data.getLong("id"));
                     }
-                    return WeatherManager.creteWeatherInfoFromJson(context, jsonResponse);
+                    return WeatherManager.creteWeatherManagerFromJson(context, jsonResponse);
                 }
 
             }
