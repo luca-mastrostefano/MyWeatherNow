@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import com.example.myweathernow.background_check.APIManager;
 import com.example.myweathernow.util.WeatherInfo;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,16 +20,18 @@ public class WeatherManager {
     private static final String preferencesName = "myweathernow_preferences";
     private static final String weatherKey = "last_weather";
 
-    Map<WeatherInfo.Period, WeatherInfo> today_overview;
-    List<WeatherInfo> today_details;
-    Map<WeatherInfo.Period, WeatherInfo> tomorrow_overview;
-    List<WeatherInfo> tomorrow_details;
+    private Map<WeatherInfo.Period, WeatherInfo> today_overview;
+    private List<WeatherInfo> today_details;
+    private Map<WeatherInfo.Period, WeatherInfo> tomorrow_overview;
+    private List<WeatherInfo> tomorrow_details;
+    private Date date;
 
-    public WeatherManager() {
+    public WeatherManager(Date date) {
         this.today_details = new ArrayList<WeatherInfo>(50);
         this.today_overview = new HashMap<WeatherInfo.Period, WeatherInfo>(6);
         this.tomorrow_details = new ArrayList<WeatherInfo>(50);
         this.tomorrow_overview = new HashMap<WeatherInfo.Period, WeatherInfo>(6);
+        this.date = date;
     }
 
     public static WeatherManager getLast(Context context) throws JSONException {
@@ -42,7 +45,7 @@ public class WeatherManager {
     }
 
     public static WeatherManager creteWeatherManagerFromJson(Context context, JSONObject json) throws JSONException {
-        WeatherManager weatherManager = new WeatherManager();
+        WeatherManager weatherManager = new WeatherManager(new Date());
         Log.d("WeatherManager", json.toString());
         String days[] = new String[]{"today", "tomorrow"};
         List<Map<WeatherInfo.Period, WeatherInfo>> overviews = new ArrayList<Map<WeatherInfo.Period, WeatherInfo>>(2);
@@ -91,23 +94,26 @@ public class WeatherManager {
         }
     }
 
-    public static String getPreferencesName() {
-        return preferencesName;
+
+    public Map<WeatherInfo.Period, WeatherInfo> getOverview(APIManager.Day day) {
+        if(APIManager.Day.TODAY.equals(day)) {
+            return today_overview;
+        }else if(APIManager.Day.TOMORROW.equals(day)){
+            return tomorrow_overview;
+        }
+        return null;
     }
 
-    @Override
-    public String toString() {
+    public List<WeatherInfo> getDetails(APIManager.Day day) {
+        if(APIManager.Day.TODAY.equals(day)) {
+            return today_details;
+        }else if(APIManager.Day.TOMORROW.equals(day)) {
+            return tomorrow_details;
+        }
         return null;
-        /*
-        return "WeatherManager{" +
-                "humidity=" + humidity +
-                ", windSpeed=" + windSpeed +
-                ", windDirection=" + windDirection +
-                ", windCardinalDirection='" + windCardinalDirection + '\'' +
-                ", cloudiness=" + cloudiness +
-                ", temperature=" + temperature +
-                ", sentence='" + sentence + '\'' +
-                ", date=" + date +
-                '}';*/
+    }
+
+    public Date getDate() {
+        return date;
     }
 }

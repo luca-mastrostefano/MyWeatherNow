@@ -29,7 +29,7 @@ public class APIManager {
     }
     public static enum Day {
         TODAY,
-        TOMORROW;
+        TOMORROW, Day;
     }
     private InformationType informationType;
     private Day day;
