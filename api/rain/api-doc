@@ -83,7 +83,8 @@ Response example:
     "night":{
         "rainProb":0.09,
         "rainIntensity":0.0041
-    }
+    },
+    sentence: ""
 }
 
 values:
