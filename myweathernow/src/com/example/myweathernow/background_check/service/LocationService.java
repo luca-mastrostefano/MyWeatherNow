@@ -1,4 +1,4 @@
-package com.example.myweathernow.background_check.test;
+package com.example.myweathernow.background_check.service;
 
 import android.app.*;
 import android.content.*;

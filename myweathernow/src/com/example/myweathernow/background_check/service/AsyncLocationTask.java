@@ -1,4 +1,4 @@
-package com.example.myweathernow.background_check.test;
+package com.example.myweathernow.background_check.service;
 
 import android.content.*;
 import android.location.*;
@@ -40,7 +40,8 @@ public class AsyncLocationTask extends AsyncTask <Location, Void, Void>{
         boolean showNotification = locDetector.addLocationToHistory(currentLocation);
         try {
             if(isNetworkAvailable()){
-                WeatherInfo weatherInfo = new APIManager().getWeatherInfo(context, currentLocation);
+                //WeatherInfo weatherInfo = new APIManager().getWeatherInfo(context, currentLocation);
+                WeatherInfo weatherInfo = null;
                 if(showNotification){
                     Log.i("Notification", "mostrata notifica");
                     notificationHand.show(weatherInfo);
@@ -51,7 +52,7 @@ public class AsyncLocationTask extends AsyncTask <Location, Void, Void>{
             }
 
         }catch(Exception e){
-
+            Log.w("AsyncLocationTask", e.toString());
         }
         return null;
     }

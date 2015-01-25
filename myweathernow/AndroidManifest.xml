@@ -23,7 +23,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
         </receiver>
-        <service android:name=".background_check.test.LocationService" android:exported="false"/>
+        <service android:name=".background_check.service.LocationService" android:exported="false"/>
     </application>
 </manifest>
 

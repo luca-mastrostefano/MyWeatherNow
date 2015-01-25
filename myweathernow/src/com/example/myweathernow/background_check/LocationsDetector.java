@@ -21,7 +21,9 @@ public class LocationsDetector {
         if (!this.userLocationHandler.hasLocation()) {
             this.userLocationHandler.setLocation(currentLocation);
             showNotification = true;
-        } else {
+        } else if(this.userLocationHandler.isKnownPlace(currentLocation)){
+            showNotification = true;
+        }else{
             Location oldLocation = this.userLocationHandler.getLastLocation();
             // due location sono diverse se distanti più di 200m
             if (currentLocation.distanceTo(oldLocation) >= 250) {
@@ -36,7 +38,7 @@ public class LocationsDetector {
                 // aggiorno quella di prima aumentando il ping
                 int updatedPing = this.userLocationHandler.increasePing();
                 Log.i("è fermo da ", ""+updatedPing);
-                if (updatedPing >= 3) {
+                if (updatedPing >= this.userLocationHandler.PING_THREASHOLD) {
                     showNotification = true;
                     this.userLocationHandler.storeKnownLocation(currentLocation);
                     // TODO se ping >= 6 aggiungo al db come location importante
