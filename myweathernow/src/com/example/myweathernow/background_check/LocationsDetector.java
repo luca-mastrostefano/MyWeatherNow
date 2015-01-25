@@ -21,7 +21,7 @@ public class LocationsDetector {
         if (!this.userLocationHandler.hasLocation()) {
             this.userLocationHandler.setLocation(currentLocation);
             showNotification = true;
-        } else if(this.userLocationHandler.isKnownPlace(currentLocation)){
+        } else if(this.userLocationHandler.isKnownLocation(currentLocation)){
             showNotification = true;
         }else{
             Location oldLocation = this.userLocationHandler.getLastLocation();
