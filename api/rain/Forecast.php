@@ -157,9 +157,11 @@ class Forecast
 
     private function getDataFromForecastIO()
     {
-        $t = "";
         if($this->when == 'tomorrow'){
             $t = ",".strtotime('tomorrow');
+        }
+        else{
+            $t = ",".strtotime('today');
         }
         //call openweathermap
         $forecastData = file_get_contents(
@@ -177,70 +179,71 @@ class Forecast
     private function formatResponse($response)
     {
         $result = array();
-            $morningData    = array(
-                'prob' => 0,
-                'intensity' => 0
-            );
-            $afternoonData  = array();
-            $eveningData    = array();
-            $nightData      = array();
+        $morningData    = array(
+            'prob' => 0,
+            'intensity' => 0
+        );
+        $afternoonData  = array();
+        $eveningData    = array();
+        $nightData      = array();
 
-            //evaluate avg values for 6 hour periods
-            foreach($response['hourly']['data'] as $hourData){
-                $hour = intval(date("G",$hourData['time']));
-                if ($hour >= 0 && $hour > 6 ) {
-                    $nightData['prob'] += $hourData['precipProbability'];
-                    $nightData['intensity'] += $hourData['precipIntensity'];
-                }
-                else if( $hour >= 6 && $hour < 12 ){
-                    $morningData['prob'] += $hourData['precipProbability'];
-                    $morningData['intensity'] += $hourData['precipIntensity'];
-                }
-                else if( $hour >= 12 && $hour < 18 ){
-                    $afternoonData['prob'] += $hourData['precipProbability'];
-                    $afternoonData['intensity'] += $hourData['precipIntensity'];
-                }
-                else if( $hour >= 18 && $hour < 24 ){
-                    $eveningData['prob'] += $hourData['precipProbability'];
-                    $eveningData['intensity'] += $hourData['precipIntensity'];
-                }
+        //evaluate avg values for 6 hour periods
+        foreach($response['hourly']['data'] as $hourData){
+            $hour = intval(date("G",$hourData['time']));
+            if ($hour >= 0 && $hour > 6 ) {
+                $nightData['prob'] += $hourData['precipProbability'];
+                $nightData['intensity'] += $hourData['precipIntensity'];
             }
+            else if( $hour >= 6 && $hour < 12 ){
+                $morningData['prob'] += $hourData['precipProbability'];
+                $morningData['intensity'] += $hourData['precipIntensity'];
+            }
+            else if( $hour >= 12 && $hour < 18 ){
+                $afternoonData['prob'] += $hourData['precipProbability'];
+                $afternoonData['intensity'] += $hourData['precipIntensity'];
+            }
+            else if( $hour >= 18 && $hour < 24 ){
+                $eveningData['prob'] += $hourData['precipProbability'];
+                $eveningData['intensity'] += $hourData['precipIntensity'];
+            }
+        }
 
-            $morningData['prob'] /= 6;
-            $morningData['intensity'] /= 6;
-            $afternoonData['prob'] /= 6;
-            $afternoonData['intensity'] /= 6;
-            $eveningData['prob'] /= 6;
-            $eveningData['intensity'] /= 6;
-            $nightData['prob'] /= 6;
-            $nightData['intensity'] /= 6;
+        $morningData['prob']        /= 6;
+        $morningData['intensity']   /= 6;
+        $afternoonData['prob']      /= 6;
+        $afternoonData['intensity'] /= 6;
+        $eveningData['prob']        /= 6;
+        $eveningData['intensity']   /= 6;
+        $nightData['prob']          /= 6;
+        $nightData['intensity']     /= 6;
 
-            $result = array(
-                'daily' => array(
-                    'rainProb' => $response['daily']['data'][0]['precipProbability'],
-                    'rainIntensity' => $response['daily']['data'][0]['precipIntensity'],
-                ),
-                'nexthour' => array(
-                    'rainProb' => $response['hourly']['data'][0]['precipProbability'],
-                    'rainIntensity' => $response['hourly']['data'][0]['precipIntensity'],
-                ),
-                'morning' => array(
-                    'rainProb' => $morningData['prob'],
-                    'rainIntensity' => $morningData['intensity'],
-                ),
-                'afternoon' => array(
-                    'rainProb' => round($afternoonData['prob'],2),
-                    'rainIntensity' => round($afternoonData['intensity'],4),
-                ),
-                'evening' => array(
-                    'rainProb' => round($eveningData['prob'],2),
-                    'rainIntensity' => round($eveningData['intensity'],4),
-                ),
-                'night' => array(
-                    'rainProb' => round($nightData['prob'],2),
-                    'rainIntensity' => round($nightData['intensity'],4),
-                )
-            );
+        $result = array(
+            'daily' => array(
+                'rainProb' => $response['daily']['data'][0]['precipProbability'],
+                'rainIntensity' => $response['daily']['data'][0]['precipIntensity'],
+            ),
+            'nexthour' => array(
+                'rainProb' => $response['hourly']['data'][0]['precipProbability'],
+                'rainIntensity' => $response['hourly']['data'][0]['precipIntensity'],
+            ),
+            'morning' => array(
+                'rainProb' => $morningData['prob'],
+                'rainIntensity' => $morningData['intensity'],
+            ),
+            'afternoon' => array(
+                'rainProb' => round($afternoonData['prob'],2),
+                'rainIntensity' => round($afternoonData['intensity'],4),
+            ),
+            'evening' => array(
+                'rainProb' => round($eveningData['prob'],2),
+                'rainIntensity' => round($eveningData['intensity'],4),
+            ),
+            'night' => array(
+                'rainProb' => round($nightData['prob'],2),
+                'rainIntensity' => round($nightData['intensity'],4),
+            ),
+            "sentence" => ""
+        );
 
         if($this->type == 'detailed') {
             $result['detailed'] = array();
