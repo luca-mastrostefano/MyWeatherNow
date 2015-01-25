@@ -1,5 +1,11 @@
 package com.example.myweathernow.util;
 
+import android.content.Context;
+import android.util.Log;
+import org.json.JSONObject;
+
+import java.util.Date;
+
 /**
  * Created by lucamastrostefano on 25/01/15.
  */
@@ -17,7 +23,7 @@ public class WeatherInfo {
     private double rainProbability;
     private double rainIntensity;
 
-    private WeatherInfo(When when, String timestamp, double rainProbability, double rainIntensity){
+    public WeatherInfo(When when, String timestamp, double rainProbability, double rainIntensity){
         this.when = when;
         this.timestamp = timestamp;
         this.rainProbability = rainProbability;
