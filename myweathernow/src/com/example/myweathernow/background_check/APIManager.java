@@ -23,7 +23,22 @@ import java.io.ByteArrayOutputStream;
  */
 public class APIManager {
 
-    private static final String URL = "http://robertotucci.netsons.org/myweathernow/api/get.php";
+    private static final String URL = "http://robertotucci.netsons.org/myweathernow/api/rain/get.php";
+    public static enum InformationType{
+        OVERVIEW,
+        DETAILED;
+    }
+    public static enum WHEN{
+        TODAY,
+        TOMORROW;
+    }
+    private InformationType informationType;
+    private WHEN when;
+
+    public APIManager(InformationType informationType, WHEN when){
+        this.informationType = informationType;
+        this.when = when;
+    }
 
     public WeatherInfo getWeatherInfo(Context context, Location location) throws Exception{
         Log.d("APIManager", "start");
@@ -67,6 +82,8 @@ public class APIManager {
             params.setDoubleParameter("latitude", location.getLatitude());
             params.setDoubleParameter("longitude", location.getLongitude());
         }
+        params.setParameter("type", this.informationType.toString());
+        params.setParameter("when", this.when.toString());
         params.setLongParameter("date", System.currentTimeMillis());
         getRequest.setParams(params);
         getRequest.addHeader("Cache-Control", "no-cache");

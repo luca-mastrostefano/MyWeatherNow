@@ -4,15 +4,18 @@ package com.example.myweathernow.persistency;
  * Created by lucamastrostefano on 04/01/15.
  */
 
-import android.content.*;
-import android.database.*;
-import android.database.sqlite.*;
-import android.location.*;
-import com.example.myweathernow.*;
-import com.example.myweathernow.exception.*;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.location.Location;
+import android.location.LocationManager;
+import android.util.Log;
+import com.example.myweathernow.background_check.LocationsDetector;
 
-import java.text.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class DatabaseManager extends SQLiteOpenHelper {
 
@@ -28,8 +31,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private static final String KEY_ID = "loc_id";
     private static final String KEY_LATITUDE = "loc_latitude";
     private static final String KEY_LONGITUDE = "loc_longitude";
-    private static final String KEY_TIMESTAMP = "loc_timestamp";
-    private static final String KEY_PING = "loc_ping_number";
 
     public static DatabaseManager getInstance(final Context context) {
         if (DatabaseManager.instance == null) {
@@ -51,10 +52,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 "CREATE TABLE " + DatabaseManager.TABLE_LOCATION_NAME + "(" +
                         DatabaseManager.KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                         DatabaseManager.KEY_LATITUDE + " REAL," +
-                        DatabaseManager.KEY_LONGITUDE + " REAL," +
-                        DatabaseManager.KEY_TIMESTAMP + " TEXT," +
-                        DatabaseManager.KEY_PING + " INTEGER)";
-
+                        DatabaseManager.KEY_LONGITUDE + " REAL)";
         db.execSQL(CREATE_LOCATION_TABLE);
     }
 
@@ -63,7 +61,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + DatabaseManager.TABLE_LOCATION_NAME);
-
         // Create tables again
         this.onCreate(db);
     }
@@ -73,7 +70,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
      */
 
     // Store a location
-    public long addLocation(final MWNlocation location) {
+    public long addLocation(final Location location) {
+        Log.d("DatabaseManager" , "Saving location in the DB");
         final SQLiteDatabase db = this.getWritableDatabase();
 
         final ContentValues values = this.createValuesFromLocation(location);
@@ -82,13 +80,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
         // db.close(); // Closing database connection
         return newID;
     }
-
+/*
     // Getting single location by id
-    public MWNlocation getLocation(final long id) {
+    public Location getLocation(final long id) {
         final SQLiteDatabase db = this.getReadableDatabase();
 
-        final String[] fields = new String[]{DatabaseManager.KEY_ID, DatabaseManager.KEY_LATITUDE, DatabaseManager.KEY_LONGITUDE,
-                DatabaseManager.KEY_TIMESTAMP, DatabaseManager.KEY_PING};
+        final String[] fields = new String[]{DatabaseManager.KEY_ID, DatabaseManager.KEY_LATITUDE, DatabaseManager.KEY_LONGITUDE};
         final Cursor cursor = db.query(DatabaseManager.TABLE_LOCATION_NAME, fields, DatabaseManager.KEY_ID + "=?", new String[]{String.valueOf(id)},
                 null, null, null, null);
         if (cursor != null) {
@@ -96,12 +93,14 @@ public class DatabaseManager extends SQLiteOpenHelper {
         }
         return this.createLocationFromResult(cursor);
     }
-
+*/
     // Getting All Location
-    public List<MWNlocation> getAllLocation() {
-        final List<MWNlocation> locationList = new ArrayList<MWNlocation>();
+    public boolean existNearKnownLocation(Location location) {
+        Log.d("DatabaseManager" , "Find near locations");
         // prende le location ordinate per ping decrescenti
-        final String selectQuery = "SELECT * FROM " + DatabaseManager.TABLE_LOCATION_NAME + " ORDER BY " + DatabaseManager.KEY_PING + " DESC";
+        double latitude = location.getLatitude();
+        double longitude = location.getLongitude();
+        final String selectQuery = "SELECT * FROM " + DatabaseManager.TABLE_LOCATION_NAME;
 
         final SQLiteDatabase db = this.getWritableDatabase();
         final Cursor cursor = db.rawQuery(selectQuery, null);
@@ -109,86 +108,43 @@ public class DatabaseManager extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                final MWNlocation location = this.createLocationFromResult(cursor);
-                locationList.add(location);
+                final Location loc = this.createLocationFromResult(cursor);
+                if(loc.distanceTo(location) <= LocationsDetector.DISTANCE_THREASHOLD){
+                    Log.d("DatabaseManager" , "Near to " + loc.getLatitude() + "; " + loc.getLongitude());
+                    return true;
+                }
             } while (cursor.moveToNext());
         }
-
-        return locationList;
+        return false;
     }
 
-    // Getting All Location with a ping number grater than a certain value
-    public List<MWNlocation> getAllLocationByPingNumber(int ping) {
-        final List<MWNlocation> locationList = new ArrayList<MWNlocation>();
-        // prende le location ordinate per ping decrescenti
-        final String selectQuery = "SELECT * FROM " + DatabaseManager.TABLE_LOCATION_NAME + " WHERE loc_ping_number >= " + ping + "ORDER BY " + DatabaseManager.KEY_PING + " DESC";
-
-        final SQLiteDatabase db = this.getWritableDatabase();
-        final Cursor cursor = db.rawQuery(selectQuery, null);
-
-        // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
-                final MWNlocation location = this.createLocationFromResult(cursor);
-                locationList.add(location);
-            } while (cursor.moveToNext());
-        }
-
-        return locationList;
-    }
-
-    // Updating single location -  aggiorna la location dall'id
-    public int updateLocation(final MWNlocation mwNlocation) throws LocationNotStoredException {
-        final SQLiteDatabase db = this.getWritableDatabase();
-
-        final ContentValues values = this.createValuesFromLocation(mwNlocation);
-
-        return db.update(DatabaseManager.TABLE_LOCATION_NAME, values, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(mwNlocation.getId())});
-    }
-
+/*
     // Deleting single location - cancella la location con l'id
-    public void deleteLocation(final MWNlocation mwNlocation) throws LocationNotStoredException {
+    public void deleteLocation(final Location location) throws LocationNotStoredException {
         final SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DatabaseManager.TABLE_LOCATION_NAME, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(mwNlocation.getId())});
+        db.delete(DatabaseManager.TABLE_LOCATION_NAME, DatabaseManager.KEY_ID + " = ?", new String[]{String.valueOf(location.getId())});
         // db.close();
     }
+*/
 
-    // Deleting all location with ping number lesser than a certain value
-    public void deleteLocationByPingNumber(final int ping) throws LocationNotStoredException {
-        final SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(DatabaseManager.TABLE_LOCATION_NAME, DatabaseManager.KEY_PING + " >= ?", new String[]{String.valueOf(ping)});
-        // db.close();
-    }
 
     // dato il risultato del db, crea un oggetto location
-    private MWNlocation createLocationFromResult(final Cursor cursor) {
-        final MWNlocation mwn_location = new MWNlocation();
-        try {
-            double latitude = cursor.getDouble(cursor.getColumnIndex(DatabaseManager.KEY_LATITUDE));
-            double longitude = cursor.getDouble(cursor.getColumnIndex(DatabaseManager.KEY_LONGITUDE));
-            Date date = this.dateFormatter.parse(cursor.getString(cursor.getColumnIndex(DatabaseManager.KEY_TIMESTAMP)));
-            long time = date.getTime();
-
-            Location loc = new Location(LocationManager.NETWORK_PROVIDER);
-            loc.setLatitude(latitude);
-            loc.setLongitude(longitude);
-            loc.setTime(time);
-
-            mwn_location.setId(cursor.getInt(cursor.getColumnIndex(DatabaseManager.KEY_ID)));
-            mwn_location.setLocation(loc);
-            mwn_location.setPing(cursor.getInt(cursor.getColumnIndex(DatabaseManager.KEY_PING)));
-        } catch (final ParseException e) {
-        }
-        return mwn_location;
+    private Location createLocationFromResult(final Cursor cursor) {
+        double latitude = cursor.getDouble(cursor.getColumnIndex(DatabaseManager.KEY_LATITUDE));
+        double longitude = cursor.getDouble(cursor.getColumnIndex(DatabaseManager.KEY_LONGITUDE));
+        Location location = new Location(LocationManager.NETWORK_PROVIDER);
+        location.setLatitude(latitude);
+        location.setLongitude(longitude);
+        return location;
     }
 
     // data una location, crea i dati da inserire nel db
-    private ContentValues createValuesFromLocation(final MWNlocation loc) {
+    private ContentValues createValuesFromLocation(final Location location) {
         final ContentValues values = new ContentValues();
-        values.put(DatabaseManager.KEY_LATITUDE, String.valueOf(loc.getLocation().getLatitude()));
-        values.put(DatabaseManager.KEY_LONGITUDE, String.valueOf(loc.getLocation().getLongitude()));
-        values.put(DatabaseManager.KEY_TIMESTAMP, this.dateFormatter.format(loc.getTimestamp()));
-        values.put(DatabaseManager.KEY_PING, loc.getPing());
+        double lat = location.getLatitude();
+        String latitude = String.valueOf(lat);
+        values.put(DatabaseManager.KEY_LATITUDE, latitude);
+        values.put(DatabaseManager.KEY_LONGITUDE, String.valueOf(location.getLongitude()));
         return values;
     }
 
