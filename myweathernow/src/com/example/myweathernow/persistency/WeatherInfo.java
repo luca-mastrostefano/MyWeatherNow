@@ -14,7 +14,8 @@ import java.util.Date;
 /**
  * Created by lucamastrostefano on 04/01/15.
  */
-public class WeatherInfo {
+public class
+        WeatherInfo {
 
     private static final String preferencesName = "myweathernow_preferences";
     private static final String weatherKey = "last_weather";

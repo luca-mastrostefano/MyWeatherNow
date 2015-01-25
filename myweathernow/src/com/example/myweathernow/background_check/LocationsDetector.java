@@ -40,6 +40,7 @@ public class LocationsDetector {
                 Log.i("è fermo da ", ""+updatedPing);
                 if (updatedPing >= this.userLocationHandler.PING_THREASHOLD) {
                     showNotification = true;
+                    this.userLocationHandler.storeKnownLocation(currentLocation);
                     // TODO se ping >= 6 aggiungo al db come location importante
                 }else{
                     showNotification = false;
