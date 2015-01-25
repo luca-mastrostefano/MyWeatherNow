@@ -1,18 +1,56 @@
 ###DETAILED REQUEST###
 Request Example:
-http://robertotucci.netsons.org/myweathernow/api/rain/get.php?type=detailed
+http://robertotucci.netsons.org/myweathernow/api/rain/get.php?type=detailed&when=(today|tomorrow)
 Response example:
 {
-"1422158400":{
-"rainProb":0.36,"rainIntensity":0.0078},
-"1422162000":{"rainProb":0.34,"rainIntensity":0.0073},
-"1422165600":{"rainProb":0.27,"rainIntensity":0.0063},
-"1422169200":{"rainProb":0.15,"rainIntensity":0.0047},
-"1422172800":{"rainProb":0.04,"rainIntensity":0.0028},
-"1422176400":{"rainProb":0.01,"rainIntensity":0.0014}
+    "daily":{
+        "rainProb":0.36,
+        "rainIntensity":0.0078},
+    "nexthour":{
+        "rainProb":0.36,
+        "rainIntensity":0.0078},
+    "morning":{
+        "rainProb":0.06,
+        "rainIntensity":0.0012},
+    "afternoon":{
+        "rainProb":0,
+        "rainIntensity":0},
+    "evening":{
+        "rainProb":0,
+        "rainIntensity":0},
+    "night":{
+        "rainProb":0.09,
+        "rainIntensity":0.0041
+    },
+    "detailed": [
+        {"timestamp": 1422158400, "rainProb":0.36,"rainIntensity":0.0078},
+        {"timestamp": 1422162000, "rainProb":0.34,"rainIntensity":0.0073},
+        {"timestamp": 1422165600, "rainProb":0.27,"rainIntensity":0.0063},
+        {"timestamp": 1422169200, "rainProb":0.15,"rainIntensity":0.0047},
+        {"timestamp": 1422172800, "rainProb":0.04,"rainIntensity":0.0028},
+        {"timestamp": 1422176400, "rainProb":0.01,"rainIntensity":0.0014},
+        {"timestamp": 1422158400, "rainProb":0.36,"rainIntensity":0.0078},
+        {"timestamp": 1422162000, "rainProb":0.34,"rainIntensity":0.0073},
+        {"timestamp": 1422165600, "rainProb":0.27,"rainIntensity":0.0063},
+        {"timestamp": 1422169200, "rainProb":0.15,"rainIntensity":0.0047},
+        {"timestamp": 1422172800, "rainProb":0.04,"rainIntensity":0.0028},
+        {"timestamp": 1422176400, "rainProb":0.01,"rainIntensity":0.0014},
+        {"timestamp": 1422158400, "rainProb":0.36,"rainIntensity":0.0078},
+        {"timestamp": 1422162000, "rainProb":0.34,"rainIntensity":0.0073},
+        {"timestamp": 1422165600, "rainProb":0.27,"rainIntensity":0.0063},
+        {"timestamp": 1422169200, "rainProb":0.15,"rainIntensity":0.0047},
+        {"timestamp": 1422172800, "rainProb":0.04,"rainIntensity":0.0028},
+        {"timestamp": 1422176400, "rainProb":0.01,"rainIntensity":0.0014},
+        {"timestamp": 1422158400, "rainProb":0.36,"rainIntensity":0.0078},
+        {"timestamp": 1422162000, "rainProb":0.34,"rainIntensity":0.0073},
+        {"timestamp": 1422165600, "rainProb":0.27,"rainIntensity":0.0063},
+        {"timestamp": 1422169200, "rainProb":0.15,"rainIntensity":0.0047},
+        {"timestamp": 1422172800, "rainProb":0.04,"rainIntensity":0.0028},
+        {"timestamp": 1422176400, "rainProb":0.01,"rainIntensity":0.0014},
+    ]
 }
 
-These are the forecast informations for the next 6 hours with an hourly granularity
+These are the forecast informations for the next 24 hours with an hourly granularity, plus the overview informations
 
 response type: JSON
 Key: timestamp
@@ -25,7 +63,7 @@ Request Example:
 http://robertotucci.netsons.org/myweathernow/api/rain/get.php?type=overview
 Response example:
 {
-    "now":{
+    "daily":{
         "rainProb":0.36,
         "rainIntensity":0.0078
     },

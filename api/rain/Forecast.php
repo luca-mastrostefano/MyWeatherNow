@@ -15,11 +15,15 @@ class Forecast
 
     private $type;
 
+    private $when;
+
     private $con;
 
     private $response;
 
     private static $allowed_actions = array('overview', 'detailed');
+
+    private static $allowed_when = array('today', 'tomorrow');
 
     const TABLE_PREFIX = "myweathernow_";
 
@@ -30,6 +34,8 @@ class Forecast
             'id' => array(
                 'filter' => FILTER_SANITIZE_NUMBER_INT),
             'type' => array(
+                'filter' => FILTER_SANITIZE_STRING),
+            'when' => array(
                 'filter' => FILTER_SANITIZE_STRING)
         );
 
@@ -37,6 +43,11 @@ class Forecast
 
         $this->id = $getInput['id'];
         $this->type = $getInput['type'];
+        $this->when = $getInput['when'];
+
+        if(!in_array($this->when, self::$allowed_when)){
+            $this->when = "today";
+        }
 
         $this->response = array(
             "status" => 200,
@@ -59,9 +70,11 @@ class Forecast
     {
         if (!in_array($this->type, self::$allowed_actions)) {
             $this->response['status'] = 400;
-            $this->response['message'] = "Action not allowed";
+            $this->response['message'] = "Type value not allowed";
             return;
         }
+
+
 
         $forecastData = $this->getDataFromForecastIO();
 
@@ -144,9 +157,13 @@ class Forecast
 
     private function getDataFromForecastIO()
     {
+        $t = "";
+        if($this->when == 'tomorrow'){
+            $t = ",".strtotime('tomorrow');
+        }
         //call openweathermap
         $forecastData = file_get_contents(
-            'https://api.forecast.io/forecast/94da895607b3b5ea9fb23c2b41c8fab4/41.54,12.27'
+            'https://api.forecast.io/forecast/94da895607b3b5ea9fb23c2b41c8fab4/41.54,12.27'.$t
         );
         $forecastData = json_decode($forecastData, true);
         return $forecastData;
@@ -160,7 +177,6 @@ class Forecast
     private function formatResponse($response)
     {
         $result = array();
-        if($this->type == 'overview'){
             $morningData    = array(
                 'prob' => 0,
                 'intensity' => 0
@@ -200,17 +216,17 @@ class Forecast
             $nightData['intensity'] /= 6;
 
             $result = array(
-                'now' => array(
-                    'rainProb' => $response['currently']['precipProbability'],
-                    'rainIntensity' => $response['currently']['precipIntensity'],
+                'daily' => array(
+                    'rainProb' => $response['daily']['data'][0]['precipProbability'],
+                    'rainIntensity' => $response['daily']['data'][0]['precipIntensity'],
                 ),
                 'nexthour' => array(
                     'rainProb' => $response['hourly']['data'][0]['precipProbability'],
                     'rainIntensity' => $response['hourly']['data'][0]['precipIntensity'],
                 ),
                 'morning' => array(
-                    'rainProb' => round($morningData['prob'],2),
-                    'rainIntensity' => round($morningData['intensity'],4),
+                    'rainProb' => $morningData['prob'],
+                    'rainIntensity' => $morningData['intensity'],
                 ),
                 'afternoon' => array(
                     'rainProb' => round($afternoonData['prob'],2),
@@ -225,11 +241,12 @@ class Forecast
                     'rainIntensity' => round($nightData['intensity'],4),
                 )
             );
-        }
-        else {
-            for( $i = 0; $i < 6; $i++){
-                $hourData = $response['hourly']['data'][$i];
-                $result[ $hourData['time'] ] = array(
+
+        if($this->type == 'detailed') {
+            $result['detailed'] = array();
+            foreach( $response['hourly']['data'] as $hourData){
+                $result['detailed'][] = array(
+                    'timestamp'     => $hourData['time'],
                     'rainProb'      => round( $hourData['precipProbability'], 2 ),
                     'rainIntensity' => round( $hourData['precipIntensity'],   4 ),
                 );
