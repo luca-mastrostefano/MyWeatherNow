@@ -84,14 +84,14 @@ class Forecast
 
         $yesterday_data = $this->getYesterdaysData();
         $sentence = SentenceMaker::makeSentence(
-            $yesterday_data,
-            array(
-                'temp' => $temperature,
-                'humidity'=> $humidity,
-                'wind_speed' => $wind,
-                'wind_dir' => $wind_dir,
-                'cloudiness' => $cloudiness
-            )
+                                 $yesterday_data,
+                                     array(
+                                         'temp' => $temperature,
+                                         'humidity'=> $humidity,
+                                         'wind_speed' => $wind,
+                                         'wind_dir' => $wind_dir,
+                                         'cloudiness' => $cloudiness
+                                     )
         );
 
         $this->response['data']['forecast']['temperature'] = $temperature;
@@ -104,15 +104,15 @@ class Forecast
 
         if (!$cache_hit) {
             $this->storeForecastData(
-                array(
-                    'city' => "Rome",
-                    'temp' => $temperature,
-                    'hum' => $humidity,
-                    'wind' => $wind,
-                    'w_dir' => $wind_dir,
-                    'rain' => 0,
-                    'cloudiness' => $cloudiness
-                )
+                 array(
+                     'city' => "Rome",
+                     'temp' => $temperature,
+                     'hum' => $humidity,
+                     'wind' => $wind,
+                     'w_dir' => $wind_dir,
+                     'rain' => 0,
+                     'cloudiness' => $cloudiness
+                 )
             );
         }
     }
@@ -166,15 +166,15 @@ class Forecast
         ");
 
         $stmt->execute(
-            array(
-                ":city" => $forecast_data['city'],
-                ":temp" => $forecast_data['temp'],
-                ":hum" => $forecast_data['hum'],
-                ":wind" => $forecast_data['wind'],
-                ":w_dir" => $forecast_data['w_dir'],
-                ":rain" => $forecast_data['rain'],
-                ":cloud" => $forecast_data['cloudiness'],
-            )
+             array(
+                 ":city" => $forecast_data['city'],
+                 ":temp" => $forecast_data['temp'],
+                 ":hum" => $forecast_data['hum'],
+                 ":wind" => $forecast_data['wind'],
+                 ":w_dir" => $forecast_data['w_dir'],
+                 ":rain" => $forecast_data['rain'],
+                 ":cloud" => $forecast_data['cloudiness'],
+             )
         );
     }
 

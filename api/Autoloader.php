@@ -6,8 +6,6 @@
  * Time: 3.04
  */
 
-namespace core;
-
 class Autoloader {
 
     public function __construct(){
