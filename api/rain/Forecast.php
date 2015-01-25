@@ -42,8 +42,8 @@ class Forecast
         $getInput = filter_input_array(INPUT_GET, $filterArgs);
 
         $this->id = $getInput['id'];
-        $this->type = $getInput['type'];
-        $this->when = $getInput['when'];
+        $this->type = strtolower($getInput['type']);
+        $this->when = strtolower($getInput['when']);
 
         if(!in_array($this->when, self::$allowed_when)){
             $this->when = "today";
