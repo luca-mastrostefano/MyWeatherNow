@@ -114,31 +114,30 @@ public class MWNhome extends Activity {
     }
 
     public void showTodayInfo(View view) {
-        Button today = (Button)findViewById(R.id.button_today);
-        Button tomorrow = (Button)findViewById(R.id.button_tomorrow);
-        tomorrow.setBackgroundColor(Color.parseColor("#80FFFFFF"));
-        tomorrow.setTextColor(Color.parseColor("#ff0c2c46"));
-        today.setBackgroundColor(Color.TRANSPARENT);
-        today.setTextColor(Color.parseColor("#ffffff"));
-        this.day = APIManager.Day.TODAY;
-        try {
-            WeatherManager weatherManager = WeatherManager.getLast(this.getApplicationContext());
-            if(weatherManager != null) {
-                this.refreshUI(weatherManager);
-            }
-        } catch (JSONException e) {
-            //Cant get weatherInfo
-        }
+        this.handleButtonClick(APIManager.Day.TODAY);
     }
 
     public void showTomorrowInfo(View view) {
+        this.handleButtonClick(APIManager.Day.TOMORROW);
+    }
+
+    private void handleButtonClick(APIManager.Day day){
         Button today = (Button)findViewById(R.id.button_today);
         Button tomorrow = (Button)findViewById(R.id.button_tomorrow);
-        today.setBackgroundColor(Color.parseColor("#80FFFFFF"));
-        today.setTextColor(Color.parseColor("#ff0c2c46"));
-        tomorrow.setBackgroundColor(Color.TRANSPARENT);
-        tomorrow.setTextColor(Color.parseColor("#ffffff"));
-        this.day = APIManager.Day.TOMORROW;
+        Button clickedButton;
+        Button otherButton;
+        if(APIManager.Day.TODAY.equals(day)){
+            clickedButton = today;
+            otherButton = tomorrow;
+        }else{
+            clickedButton = tomorrow;
+            otherButton = today;
+        }
+        clickedButton.setBackgroundColor(Color.TRANSPARENT);
+        clickedButton.setTextColor(Color.parseColor("#ffffff"));
+        otherButton.setBackgroundColor(Color.parseColor("#80FFFFFF"));
+        otherButton.setTextColor(Color.parseColor("#ff0c2c46"));
+        this.day = day;
         try {
             WeatherManager weatherManager = WeatherManager.getLast(this.getApplicationContext());
             if(weatherManager != null) {
