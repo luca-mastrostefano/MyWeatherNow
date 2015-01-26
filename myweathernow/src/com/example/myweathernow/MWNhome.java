@@ -6,22 +6,27 @@ import android.os.*;
 import android.preference.*;
 import android.util.*;
 import android.widget.*;
+import com.example.myweathernow.background_check.APIManager;
 import com.example.myweathernow.background_check.service.*;
 import com.example.myweathernow.persistency.*;
+import com.example.myweathernow.util.WeatherInfo;
 import org.json.*;
 
 import java.text.*;
+import java.util.List;
 
 public class MWNhome extends Activity {
 
     private static final DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM");
+    private APIManager.Day day;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.prova);
         Log.i("MWNhome", "Entrato nella home");
         Log.i("Thread Home", ""  + Thread.currentThread().getId());
+        this.day = APIManager.Day.TODAY;
         if(this.isFirstStart()){
             Log.e("MWNhome","Service not started, let's start it now!");
             Intent intent = new Intent(this, LocationService.class);
@@ -44,14 +49,10 @@ public class MWNhome extends Activity {
 
     public void refreshUI(WeatherManager weatherManager){
         Log.i("MWNhome", weatherManager.toString());
-        /*
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
-        ((TextView) this.findViewById(R.id.value_humidity)).setText(weatherManager.getHumidity() + "%");
-        ((TextView) this.findViewById(R.id.value_temperature)).setText(Double.toString(Math.ceil(weatherManager.getTemperature() - 273.15)) + "°");
-        ((TextView) this.findViewById(R.id.value_wind)).setText(Double.toString(Math.round(weatherManager.getWindSpeed()*10)/10) + "[m/s] " + weatherManager.getWindCardinalDirection());
-        ((TextView) this.findViewById(R.id.value_cloud)).setText(Double.toString(weatherManager.getCloudiness()) + "%");
-        ((TextView) this.findViewById(R.id.weather_suggestion)).setText(weatherManager.getSentence());*/
+        List<WeatherInfo> details = weatherManager.getDetails(this.day);
+        //TODO bla bla bla with details
     }
 
     private boolean isFirstStart(){

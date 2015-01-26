@@ -101,7 +101,6 @@
                 android:layout_weight="0.5"
                 android:weightSum="1"
                 android:background="#80FFFFFF">
-
             <LinearLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
@@ -144,6 +143,19 @@
                         android:gravity="center"
                         android:textStyle="bold"
                         android:layout_weight="0.25"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="fill_parent"
+                    android:background="#80FFFFFF">
+                <!-- https://github.com/PhilJay/MPAndroidChart -->
+                <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chart"
+                        android:layout_width="match_parent"
+                        android:layout_height="fill_parent"
+
+                />
             </LinearLayout>
 
         </LinearLayout>
