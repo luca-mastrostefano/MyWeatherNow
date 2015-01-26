@@ -3,7 +3,7 @@
     <string name="app_name">My Weather Now</string>
     <string name="location_name">Roma</string>
     <string name="date">Dom, 25 Gen</string>
-    <string name="umbrella_suggestion">Prendi l'ombrello!</string>
+    <string name="umbrella_suggestion">Prendi l\'ombrello!</string>
     <string name="rain_probabiloty_title">Probabilità</string>
     <string name="rain_intensity_title">Intensità</string>
     <string name="rain_probabiloty_value">85%</string>
