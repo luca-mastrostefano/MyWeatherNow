@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="@string/location_name"
-                    android:id="@+id/location"
+                    android:id="@+id/city"
                     android:layout_gravity="right"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
@@ -97,7 +97,7 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="0.5"
                 android:weightSum="1"
                 android:background="#80FFFFFF">
@@ -146,14 +146,14 @@
             </LinearLayout>
             <LinearLayout
                     android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="fill_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:background="#80FFFFFF">
                 <!-- https://github.com/PhilJay/MPAndroidChart -->
                 <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chart"
                         android:layout_width="match_parent"
-                        android:layout_height="fill_parent"
+                        android:layout_height="match_parent"
 
                 />
             </LinearLayout>

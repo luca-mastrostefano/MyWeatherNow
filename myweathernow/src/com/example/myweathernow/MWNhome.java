@@ -5,15 +5,16 @@ import android.content.*;
 import android.os.*;
 import android.preference.*;
 import android.util.*;
+import android.view.*;
 import android.widget.*;
-import com.example.myweathernow.background_check.APIManager;
+import com.example.myweathernow.background_check.*;
 import com.example.myweathernow.background_check.service.*;
 import com.example.myweathernow.persistency.*;
-import com.example.myweathernow.util.WeatherInfo;
+import com.example.myweathernow.util.*;
 import org.json.*;
 
 import java.text.*;
-import java.util.List;
+import java.util.*;
 
 public class MWNhome extends Activity {
 
@@ -74,5 +75,13 @@ public class MWNhome extends Activity {
         return isFirstStart;
     }
 
+    public void showTodayInfo(View view) {
+        //TODO mostrare le informazioni di oggi
+//        view.findViewById(R.id.button_today).setBackgroundColor();
+    }
+
+    public void showTomorrowInfo(View view) {
+        //TODO mostrare le informazioni di domani
+    }
 }
 
