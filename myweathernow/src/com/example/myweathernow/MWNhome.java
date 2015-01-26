@@ -2,7 +2,6 @@ package com.example.myweathernow;
 
 import android.app.*;
 import android.content.*;
-import android.graphics.Color;
 import android.graphics.*;
 import android.os.*;
 import android.preference.*;
@@ -13,11 +12,9 @@ import com.example.myweathernow.background_check.*;
 import com.example.myweathernow.background_check.service.*;
 import com.example.myweathernow.persistency.*;
 import com.example.myweathernow.util.*;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
+import com.github.mikephil.charting.charts.*;
+import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.utils.*;
 import org.json.*;
 
 import java.text.*;
@@ -117,8 +114,8 @@ public class MWNhome extends Activity {
     }
 
     public void showTodayInfo(View view) {
-        Button today = (Button)view.findViewById(R.id.button_today);
-        Button tomorrow = (Button)view.findViewById(R.id.button_tomorrow);
+        Button today = (Button)findViewById(R.id.button_today);
+        Button tomorrow = (Button)findViewById(R.id.button_tomorrow);
         tomorrow.setBackgroundColor(Color.parseColor("#80FFFFFF"));
         tomorrow.setTextColor(Color.parseColor("#ff0c2c46"));
         today.setBackgroundColor(Color.TRANSPARENT);
@@ -135,8 +132,8 @@ public class MWNhome extends Activity {
     }
 
     public void showTomorrowInfo(View view) {
-        Button today = (Button)view.findViewById(R.id.button_today);
-        Button tomorrow = (Button)view.findViewById(R.id.button_tomorrow);
+        Button today = (Button)findViewById(R.id.button_today);
+        Button tomorrow = (Button)findViewById(R.id.button_tomorrow);
         today.setBackgroundColor(Color.parseColor("#80FFFFFF"));
         today.setTextColor(Color.parseColor("#ff0c2c46"));
         tomorrow.setBackgroundColor(Color.TRANSPARENT);
