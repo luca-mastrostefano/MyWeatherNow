@@ -22,7 +22,7 @@ import java.io.ByteArrayOutputStream;
  */
 public class APIManager {
 
-    private static final String URL = "http://robertotucci.netsons.org/myweathernow/api/rain/get.php";
+    private static final String URL = "http://robertotucci.netsons.org/myweathernow/api/rain/get.php?type=DETAILED&when=TODAY";
     public static enum InformationType{
         OVERVIEW,
         DETAILED;
@@ -55,14 +55,8 @@ public class APIManager {
                 out.close();
                 String responseString = out.toString();
                 final JSONObject jsonResponse = new JSONObject(responseString.trim());
-                if(jsonResponse.getInt("status") == 200){
-                    JSONObject data = jsonResponse.getJSONObject("data");
-                    if(!userID.isValid()){
-                        userID.storeUserID(data.getLong("id"));
-                    }
-                    return WeatherManager.creteWeatherManagerFromJson(context, jsonResponse);
-                }
-
+                Log.d("APIManager", jsonResponse.toString());
+                return WeatherManager.creteWeatherManagerFromJson(context, jsonResponse);
             }
         } catch (final Exception e) {
             e.printStackTrace();
@@ -74,17 +68,14 @@ public class APIManager {
     private HttpGet createGetRequest(UserID userID, Location location){
         final HttpGet getRequest = new HttpGet(APIManager.URL);
         HttpParams params = new BasicHttpParams();
-        if(userID.isValid()) {
-            params.setLongParameter("userid", userID.getUserID());
-        }
         if(location != null) {
             params.setDoubleParameter("latitude", location.getLatitude());
             params.setDoubleParameter("longitude", location.getLongitude());
         }
         params.setParameter("type", this.informationType.toString());
-        params.setParameter("day", this.day.toString());
+        params.setParameter("when", this.day.toString());
         params.setLongParameter("date", System.currentTimeMillis());
-        getRequest.setParams(params);
+        //getRequest.setParams(params);
         getRequest.addHeader("Cache-Control", "no-cache");
         return getRequest;
     }
