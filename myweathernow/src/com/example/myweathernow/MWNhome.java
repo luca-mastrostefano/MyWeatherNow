@@ -3,6 +3,7 @@ package com.example.myweathernow;
 import android.app.*;
 import android.content.*;
 import android.graphics.Color;
+import android.graphics.*;
 import android.os.*;
 import android.preference.*;
 import android.util.*;
@@ -116,12 +117,39 @@ public class MWNhome extends Activity {
     }
 
     public void showTodayInfo(View view) {
-        //TODO mostrare le informazioni di oggi
-//        view.findViewById(R.id.button_today).setBackgroundColor();
+        Button today = (Button)view.findViewById(R.id.button_today);
+        Button tomorrow = (Button)view.findViewById(R.id.button_tomorrow);
+        tomorrow.setBackgroundColor(Color.parseColor("#80FFFFFF"));
+        tomorrow.setTextColor(Color.parseColor("#ff0c2c46"));
+        today.setBackgroundColor(Color.TRANSPARENT);
+        today.setTextColor(Color.parseColor("#ffffff"));
+        this.day = APIManager.Day.TODAY;
+        try {
+            WeatherManager weatherManager = WeatherManager.getLast(this.getApplicationContext());
+            if(weatherManager != null) {
+                this.refreshUI(weatherManager);
+            }
+        } catch (JSONException e) {
+            //Cant get weatherInfo
+        }
     }
 
     public void showTomorrowInfo(View view) {
-        //TODO mostrare le informazioni di domani
+        Button today = (Button)view.findViewById(R.id.button_today);
+        Button tomorrow = (Button)view.findViewById(R.id.button_tomorrow);
+        today.setBackgroundColor(Color.parseColor("#80FFFFFF"));
+        today.setTextColor(Color.parseColor("#ff0c2c46"));
+        tomorrow.setBackgroundColor(Color.TRANSPARENT);
+        tomorrow.setTextColor(Color.parseColor("#ffffff"));
+        this.day = APIManager.Day.TOMORROW;
+        try {
+            WeatherManager weatherManager = WeatherManager.getLast(this.getApplicationContext());
+            if(weatherManager != null) {
+                this.refreshUI(weatherManager);
+            }
+        } catch (JSONException e) {
+            //Cant get weatherInfo
+        }
     }
 }
 
