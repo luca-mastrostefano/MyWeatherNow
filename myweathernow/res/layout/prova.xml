@@ -33,7 +33,8 @@
                     android:textColor="#ffffff"
                     android:textStyle="bold"
                     android:layout_gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:onClick="showTodayInfo"/>
             <Button
                     android:layout_width="0dp"
                     android:layout_height="fill_parent"
@@ -44,7 +45,8 @@
                     android:textColor="#ff0c2c46"
                     android:textStyle="bold"
                     android:layout_gravity="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"/>
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:onClick="showTomorrowInfo"/>
         </LinearLayout>
         <LinearLayout
                 android:orientation="vertical"
