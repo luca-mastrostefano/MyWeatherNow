@@ -14,6 +14,10 @@
     <string name="night">0:00</string>
     <string name="button_today">OGGI</string>
     <string name="button_tomorrow">DOMANI</string>
+    <string name="probability_today_title">Probabilità</string>
+    <string name="intensity_today_title">Intensità</string>
+    <string name="probability_today_value">85%</string>
+    <string name="intensity_today_value">20mm</string>
 
 
 </resources>
