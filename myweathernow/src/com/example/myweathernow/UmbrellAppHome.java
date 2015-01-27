@@ -20,7 +20,7 @@ import org.json.*;
 import java.text.*;
 import java.util.*;
 
-public class MWNhome extends Activity {
+public class UmbrellAppHome extends Activity {
 
     private static final DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM");
     private APIManager.Day day;

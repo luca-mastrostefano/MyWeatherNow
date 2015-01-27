@@ -7,15 +7,15 @@ import java.util.*;
 /**
  * Created by ele on 05/01/15.
  */
-public class MWNlocation {
+public class UmbrellAppLocation {
     private int id;
     private Location location;
     private int ping;
 
-    public MWNlocation(){
+    public UmbrellAppLocation(){
     }
 
-    public MWNlocation(int id, Location l, int p){
+    public UmbrellAppLocation(int id, Location l, int p){
         this.id = id;
         this.location = l;
         this.ping = p;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">My Weather Now</string>
+    <string name="app_name">UmbrellApp</string>
     <string name="location_name">Roma</string>
     <string name="date">Dom, 25 Gen</string>
     <string name="umbrella_suggestion">Prendi l\'ombrello!</string>
