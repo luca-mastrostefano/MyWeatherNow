@@ -1,19 +1,12 @@
 package com.example.myweathernow.util;
 
-import android.graphics.Color;
-import android.util.Log;
-import com.github.mikephil.charting.charts.Chart;
-import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.utils.ColorTemplate;
-import com.github.mikephil.charting.utils.YLabels;
+import android.graphics.*;
+import android.util.*;
+import com.github.mikephil.charting.charts.*;
+import com.github.mikephil.charting.data.*;
+import com.github.mikephil.charting.utils.*;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by lucamastrostefano on 27/01/15.
