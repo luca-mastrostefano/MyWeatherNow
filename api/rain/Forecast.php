@@ -15,8 +15,6 @@ class Forecast
 
     private $type;
 
-    private $when;
-
     private $con;
 
     private $response;
@@ -34,8 +32,6 @@ class Forecast
             'id' => array(
                 'filter' => FILTER_SANITIZE_NUMBER_INT),
             'type' => array(
-                'filter' => FILTER_SANITIZE_STRING),
-            'when' => array(
                 'filter' => FILTER_SANITIZE_STRING)
         );
 
@@ -43,11 +39,6 @@ class Forecast
 
         $this->id = $getInput['id'];
         $this->type = strtolower($getInput['type']);
-        $this->when = strtolower($getInput['when']);
-
-        if(!in_array($this->when, self::$allowed_when)){
-            $this->when = "today";
-        }
 
         $this->response = array(
             "status" => 200,
@@ -75,16 +66,15 @@ class Forecast
         }
 
 
-
-        $forecastData = $this->getDataFromForecastIO();
-
-        if ($forecastData == null) {
-            $this->response['status'] = 500;
-            return;
-        }
-
-        $forecastData = $this->formatResponse($forecastData);
-
+        $forecastData = array();
+        foreach($this->allowed_when as $when){
+            $daily_forecastData = $this->getDataFromForecastIO($when);
+            if ($daily_forecastData == null) {
+                $this->response['status'] = 500;
+                return;
+            }
+            $forecastData[$when] = $this->formatResponse($daily_forecastData);
+        }  
         $this->response = $forecastData;
     }
 
@@ -155,9 +145,9 @@ class Forecast
         );
     }
 
-    private function getDataFromForecastIO()
+    private function getDataFromForecastIO($when)
     {
-        if($this->when == 'tomorrow'){
+        if($when == 'tomorrow'){
             $t = ",".strtotime('tomorrow');
         }
         else{
@@ -186,7 +176,10 @@ class Forecast
         $afternoonData  = array();
         $eveningData    = array();
         $nightData      = array();
-
+        $dailyData = array(
+            'prob' => 0,
+            'intensity' => 0
+        ); 
         //evaluate avg values for 6 hour periods
         foreach($response['hourly']['data'] as $hourData){
             $hour = intval(date("G",$hourData['time']));
@@ -208,18 +201,32 @@ class Forecast
             }
         }
 
+        $nowHour = intval(date("G",  strtotime('now')));
         $morningData['prob']        /= 6;
         $morningData['intensity']   /= 6;
+        if($nowHour <= (6+12)/2){
+            $dailyData['prob'] += (1-$dailyData['prob']) * $morningData['prob'];
+        }
         $afternoonData['prob']      /= 6;
         $afternoonData['intensity'] /= 6;
+        if($nowHour <= (12+18)/2){
+            $dailyData['prob'] += (1-$dailyData['prob']) * $afternoonData['prob'];
+        }
         $eveningData['prob']        /= 6;
         $eveningData['intensity']   /= 6;
+        if($nowHour <= 24){ //Always
+            $dailyData['prob'] += (1-$dailyData['prob']) * $eveningData['prob'];
+        }
         $nightData['prob']          /= 6;
         $nightData['intensity']     /= 6;
-
+        if($nowHour >= 0){  //Always
+            $dailyData['prob'] += (1-$dailyData['prob']) * $nightData['prob'];
+        }
+        
+       
         $result = array(
             'daily' => array(
-                'rainProb' => $response['daily']['data'][0]['precipProbability'],
+                'rainProb' => round($dailyData['prob'],2),
                 'rainIntensity' => $response['daily']['data'][0]['precipIntensity'],
             ),
             'nexthour' => array(
@@ -252,11 +259,28 @@ class Forecast
                     'timestamp'     => $hourData['time'],
                     'rainProb'      => round( $hourData['precipProbability'], 2 ),
                     'rainIntensity' => round( $hourData['precipIntensity'],   4 ),
+                    'period'        => $this->fromTime2period($hourData['time']),
                 );
             }
         }
 
         return $result;
+    }
+
+    private function fromTime2period($time){
+            $hour = intval(date("G",$hourData['time']));
+            if ($hour >= 0 && $hour > 6 ) {
+                return 'night';
+            }
+            else if( $hour >= 6 && $hour < 12 ){
+                return 'morning';
+            }
+            else if( $hour >= 12 && $hour < 18 ){
+                return 'afternoon';
+            }
+            else if( $hour >= 18 && $hour < 24 ){
+                return 'evening';
+            } 
     }
 
     /**
