@@ -23,7 +23,7 @@ public class PhraseMaker {
 
     private static String[] characters = new String[]{"m", "p", "s"};
 
-    private static enum Slot {
+    public static enum Slot {
         NO_RAIN("Lascia l’omprello a casa, oggi sicuramente non piove!", "Lascia l’omprello a casa, oggi sicuramente non piove!"),
         VERY_LOW("Lascia l’ombrello a casa, oggi non piove!", "Lascia l’ombrello a casa, oggi non piove!"),
         LOW("Non dovrebbe piovere, ma se XXX non vuoi rischiare portalo", "Oggi non dovrebbe piovere, ma se non vuoi rischiare portalo"),
@@ -56,15 +56,17 @@ public class PhraseMaker {
         }
     }
 
-    public static String getPhrase(WeatherManager weatherManager, APIManager.Day day) {
+    public static Map.Entry<Slot, String> getPhrase(WeatherManager weatherManager, APIManager.Day day) {
         Map<WeatherInfo.Period, WeatherInfo> periodToInfo = weatherManager.getOverview(day);
         double dailyProbability = periodToInfo.get(WeatherInfo.Period.DAILY).getRainProbability();
         // controllo prima la probabilità del giorno
         Slot slot = Slot.fromDoubleToSlot(dailyProbability);
+        String stringToRetunr = "";
         switch (slot) {
             case NO_RAIN:
             case VERY_LOW:
-                return slot.phrase;
+                stringToRetunr = slot.phrase;
+                break;
             case LOW:
             case MEDIUM:
             case HIGH:
@@ -75,13 +77,13 @@ public class PhraseMaker {
                 double[] probabilities = new double[]{morningProbability, afternoonProbability, eveningProbability};
                 String rainingPhase = getRainingPhase(probabilities);
                 if (rainingPhase.equals("mps")) {
-                    return slot.phraseDay;
+                    stringToRetunr = slot.phraseDay;
                 } else {
-                    return slot.phrase.replace("XXX", phaseToSentence.get(rainingPhase));
+                    stringToRetunr = slot.phrase.replace("XXX", phaseToSentence.get(rainingPhase));
                 }
-            default:
-                return "";
+                break;
         }
+        return new AbstractMap.SimpleImmutableEntry<Slot, String>(slot,stringToRetunr);
     }
 
     private static String getRainingPhase(double[] probabilities) {
