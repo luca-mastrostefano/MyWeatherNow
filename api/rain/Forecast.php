@@ -67,7 +67,7 @@ class Forecast
 
 
         $forecastData = array();
-        foreach($this->allowed_when as $when){
+        foreach(self::$allowed_when as $when){
             $daily_forecastData = $this->getDataFromForecastIO($when);
             if ($daily_forecastData == null) {
                 $this->response['status'] = 500;
@@ -228,6 +228,7 @@ class Forecast
             'daily' => array(
                 'rainProb' => round($dailyData['prob'],2),
                 'rainIntensity' => $response['daily']['data'][0]['precipIntensity'],
+                'sentence' => "",
             ),
             'nexthour' => array(
                 'rainProb' => $response['hourly']['data'][0]['precipProbability'],
@@ -248,8 +249,7 @@ class Forecast
             'night' => array(
                 'rainProb' => round($nightData['prob'],2),
                 'rainIntensity' => round($nightData['intensity'],4),
-            ),
-            "sentence" => ""
+            )
         );
 
         if($this->type == 'detailed') {
@@ -257,8 +257,8 @@ class Forecast
             foreach( $response['hourly']['data'] as $hourData){
                 $result['detailed'][] = array(
                     'timestamp'     => $hourData['time'],
-                    'rainProb'      => round( $hourData['precipProbability'], 2 ),
-                    'rainIntensity' => round( $hourData['precipIntensity'],   4 ),
+                    'rainProb'      => rand(1,10)/10 + round( $hourData['precipProbability'], 2 ),
+                    'rainIntensity' => rand(1,10)/10 + round( $hourData['precipIntensity'],   4 ),
                     'period'        => $this->fromTime2period($hourData['time']),
                 );
             }
@@ -268,8 +268,8 @@ class Forecast
     }
 
     private function fromTime2period($time){
-            $hour = intval(date("G",$hourData['time']));
-            if ($hour >= 0 && $hour > 6 ) {
+            $hour = intval(date("G",$time));
+            if ($hour >= 0 && $hour < 6 ) {
                 return 'night';
             }
             else if( $hour >= 6 && $hour < 12 ){
@@ -280,7 +280,8 @@ class Forecast
             }
             else if( $hour >= 18 && $hour < 24 ){
                 return 'evening';
-            } 
+            }
+            var_dump($hour);exit;
     }
 
     /**
