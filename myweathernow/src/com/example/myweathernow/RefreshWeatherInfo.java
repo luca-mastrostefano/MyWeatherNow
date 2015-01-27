@@ -10,9 +10,9 @@ import com.example.myweathernow.util.NetworkUtil;
  */
 public class RefreshWeatherInfo extends AsyncTask<Void, WeatherManager, WeatherManager> {
 
-    private MWNhome homeActivity;
+    private UmbrellAppHome homeActivity;
 
-    public RefreshWeatherInfo(MWNhome homeActivity){
+    public RefreshWeatherInfo(UmbrellAppHome homeActivity){
         this.homeActivity = homeActivity;
     }
 
