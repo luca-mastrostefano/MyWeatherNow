@@ -60,8 +60,9 @@ public class WeatherManager {
             Iterator keys_iterator = info.keys();
             while(keys_iterator.hasNext()){
                 Object key = keys_iterator.next();
-                if (key.equals("details")) {
-                    JSONArray weather_details = json.getJSONArray("details");
+                String key_str = (String) key;
+                if (key_str.equalsIgnoreCase("detailed")) {
+                    JSONArray weather_details = info.getJSONArray(key_str);
                     for(int index = 0; index < weather_details.length(); index++) {
                         JSONObject weather_obj = weather_details.getJSONObject(index);
                         WeatherInfo.Period period = WeatherInfo.Period.valueOf(weather_obj.getString("period").toUpperCase());
@@ -70,12 +71,15 @@ public class WeatherManager {
                         details.get(i).add( weatherInfo);
                     }
                 } else {
-                    String period_str = (String) key;
-                    WeatherInfo.Period period = WeatherInfo.Period.valueOf(period_str.toUpperCase());
-                    JSONObject more_info = json.getJSONObject(period_str);
-                    WeatherInfo weatherInfo =
-                            new WeatherInfo(period, more_info.getDouble("rainProb"), more_info.getDouble("rainIntensity"));
-                    overviews.get(i).put(period, weatherInfo);
+                    String period_str = key_str.toUpperCase();
+                    if(!"NEXTHOUR".equalsIgnoreCase(period_str) && !"SENTENCE".equalsIgnoreCase(period_str)) {
+                        WeatherInfo.Period period = WeatherInfo.Period.valueOf(period_str);
+                        JSONObject more_info = info.getJSONObject(key_str);
+                        String sentence = more_info.has("sentence") ? more_info.getString("sentence") : null;
+                        WeatherInfo weatherInfo =
+                                new WeatherInfo(period, sentence, more_info.getDouble("rainProb"), more_info.getDouble("rainIntensity"));
+                        overviews.get(i).put(period, weatherInfo);
+                    }
                 }
 
             }

@@ -37,6 +37,7 @@ public class MWNhome extends Activity {
             Intent intent = new Intent(this, LocationService.class);
             startService(intent);
         }else{
+            Log.e("MWNhome","Start service for test!");
             Intent intent = new Intent(this, LocationService.class);
             startService(intent);
         }
@@ -60,23 +61,21 @@ public class MWNhome extends Activity {
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
         List<WeatherInfo> details = weatherManager.getDetails(this.day);
+
         LineChart chart = (LineChart) findViewById(R.id.chart);
-        chart.animateXY(1500,1500);
+        chart.animateXY(1000,1000);
         Log.d("MWNhome-refreshUI" , "iterating " + details.size() + " weatherInfo");
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < details.size(); i++) {
             xVals.add((i) + "");
         }
-
-        ArrayList<Entry> yVals = new ArrayList<Entry>();
-
+        ArrayList<Entry> probabilities = new ArrayList<Entry>();
         for (int i = 0; i < details.size(); i++) {
             WeatherInfo weatherInfo = details.get(i);
-            yVals.add(new Entry((float)weatherInfo.getRainProbability(), i));
+            probabilities.add(new Entry((float)weatherInfo.getRainProbability(), i));
         }
-
         // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(yVals, "DataSet 1");
+        LineDataSet set1 = new LineDataSet(probabilities, "DataSet 1");
         set1.setColor(ColorTemplate.getHoloBlue());
         set1.setCircleColor(ColorTemplate.getHoloBlue());
         set1.setLineWidth(2f);
@@ -85,8 +84,23 @@ public class MWNhome extends Activity {
         set1.setFillColor(ColorTemplate.getHoloBlue());
         set1.setHighLightColor(Color.rgb(244, 117, 117));
 
+        ArrayList<Entry> intensities = new ArrayList<Entry>();
+        for (int i = 0; i < details.size(); i++) {
+            WeatherInfo weatherInfo = details.get(i);
+            intensities.add(new Entry((float)weatherInfo.getRainIntensity(), i));
+        }
+        // create a dataset and give it a type
+        LineDataSet set2 = new LineDataSet(intensities, "DataSet 1");
+        set2.setColor(Color.parseColor("red"));
+        set2.setCircleColor(Color.parseColor("red"));
+        set2.setLineWidth(2f);
+        set2.setCircleSize(4f);
+        set2.setFillAlpha(65);
+        set2.setFillColor(ColorTemplate.getHoloBlue());
+        set2.setHighLightColor(Color.rgb(244, 117, 117));
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(set1); // add the datasets
+        dataSets.add(set2); // add the datasets
 
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
@@ -106,9 +120,9 @@ public class MWNhome extends Activity {
             preferencesEditor.commit();
         }
         if(isFirstStart) {
-            Log.i("MWNhome", "firstStart");
+            Log.i("MWNhome", "è la prima volta che parte l'applicazione");
         }else{
-            Log.i("MWNhome", "già partito");
+            Log.i("MWNhome", "applicazione già avviata in passato");
         }
         return isFirstStart;
     }

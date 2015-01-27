@@ -7,6 +7,7 @@ import android.os.*;
 import android.util.*;
 import com.example.myweathernow.background_check.*;
 import com.example.myweathernow.persistency.*;
+import com.example.myweathernow.util.NetworkUtil;
 
 /**
  * Created by ele on 18/01/15.
@@ -22,14 +23,6 @@ public class AsyncLocationTask extends AsyncTask <Location, Void, Void>{
         this.context = c;
     }
 
-    private boolean isNetworkAvailable(){
-        ConnectivityManager cm =
-                (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo != null && netInfo.isConnectedOrConnecting();
-    }
-
-
     @Override
     protected Void doInBackground(Location... currentLocations) {
         Location currentLocation = currentLocations[0];
@@ -39,7 +32,7 @@ public class AsyncLocationTask extends AsyncTask <Location, Void, Void>{
         Log.i("Thread Service 2", ""  + Thread.currentThread().getId());
         boolean showNotification = locDetector.addLocationToHistory(currentLocation);
         try {
-            if(isNetworkAvailable()){
+            if(NetworkUtil.isNetworkAvailable(this.context)){
                 APIManager apiManager = new APIManager(APIManager.InformationType.OVERVIEW, APIManager.Day.TODAY);
                 WeatherManager weatherManager = apiManager.getWeatherInfo(context, currentLocation);
                 if(showNotification){

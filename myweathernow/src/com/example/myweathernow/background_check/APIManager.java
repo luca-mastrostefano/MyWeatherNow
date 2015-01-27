@@ -22,7 +22,7 @@ import java.io.ByteArrayOutputStream;
  */
 public class APIManager {
 
-    private static final String URL = "http://robertotucci.netsons.org/myweathernow/api/rain/get.php?type=DETAILED&when=TODAY";
+    private static final String URL = "http://topbestever.com/myweathernow/api/rain/get.php?type=detailed";
     public static enum InformationType{
         OVERVIEW,
         DETAILED;
@@ -54,6 +54,7 @@ public class APIManager {
                 response.getEntity().writeTo(out);
                 out.close();
                 String responseString = out.toString();
+                Log.d("APIManager", responseString);
                 final JSONObject jsonResponse = new JSONObject(responseString.trim());
                 Log.d("APIManager", jsonResponse.toString());
                 return WeatherManager.creteWeatherManagerFromJson(context, jsonResponse);
@@ -73,7 +74,7 @@ public class APIManager {
             params.setDoubleParameter("longitude", location.getLongitude());
         }
         params.setParameter("type", this.informationType.toString());
-        params.setParameter("when", this.day.toString());
+        //params.setParameter("when", this.day.toString());
         params.setLongParameter("date", System.currentTimeMillis());
         //getRequest.setParams(params);
         getRequest.addHeader("Cache-Control", "no-cache");
