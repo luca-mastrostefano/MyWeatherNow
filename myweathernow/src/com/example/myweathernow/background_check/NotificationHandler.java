@@ -5,6 +5,7 @@ import android.content.*;
 import android.support.v4.app.*;
 import com.example.myweathernow.*;
 import com.example.myweathernow.persistency.WeatherManager;
+import com.example.myweathernow.util.WeatherInfo;
 
 /**
  * Created by lucamastrostefano on 04/01/15.
@@ -23,15 +24,16 @@ public class NotificationHandler {
     }
 
     public void show(WeatherManager weatherManager) {
-        mBuilder.setSmallIcon(R.drawable.weather_sample);
+        if(weatherManager != null) {
+            mBuilder.setSmallIcon(R.drawable.weather_sample);
 //        mBuilder.setContentText(weatherManager.getSentence());
-        mBuilder.setContentText("ciaone!");
-        Intent openAppIntent = new Intent(this.c, MWNhome.class);
-        PendingIntent openAppPendingIntent = PendingIntent.getActivity(this.c, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(openAppPendingIntent);
-        mBuilder.setOngoing(true);
-        mNotificationManager.notify(notificationID, mBuilder.build());
-
+            mBuilder.setContentText(weatherManager.getOverview(APIManager.Day.TODAY).get(WeatherInfo.Period.DAILY).getSentence());
+            Intent openAppIntent = new Intent(this.c, MWNhome.class);
+            PendingIntent openAppPendingIntent = PendingIntent.getActivity(this.c, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            mBuilder.setContentIntent(openAppPendingIntent);
+            mBuilder.setOngoing(true);
+            mNotificationManager.notify(notificationID, mBuilder.build());
+        }
     }
 
     public void hide() {

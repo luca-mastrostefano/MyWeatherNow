@@ -8,6 +8,7 @@ import org.json.JSONObject;
 public class WeatherInfo {
 
     public static enum Period {
+        DAILY,
         MORNING,
         AFTERNOON,
         EVENING,
@@ -15,23 +16,25 @@ public class WeatherInfo {
     }
 
     private Period period;
+    private String sentence;
     private String timestamp;
     private double rainProbability;
     private double rainIntensity;
 
-    public WeatherInfo(Period period, String timestamp, double rainProbability, double rainIntensity){
+    public WeatherInfo(Period period, String sentence, String timestamp, double rainProbability, double rainIntensity){
         this.period = period;
+        this.sentence = sentence;
         this.timestamp = timestamp;
         this.rainProbability = rainProbability;
         this.rainIntensity = rainIntensity;
     }
 
-    public WeatherInfo(Period period, double rainProbability, double rainIntensity){
-        this(period, null, rainProbability, rainIntensity);
+    public WeatherInfo(Period period, String sentence, double rainProbability, double rainIntensity){
+        this(period, sentence, null, rainProbability, rainIntensity);
     }
 
     public WeatherInfo(String timestamp, double rainProbability, double rainIntensity){
-        this(null, timestamp, rainProbability, rainIntensity);
+        this(null, null, timestamp, rainProbability, rainIntensity);
     }
 
     public static WeatherInfo creteWeatherInfoFromJson(JSONObject json) throws Exception {
@@ -54,6 +57,10 @@ public class WeatherInfo {
 
     public Period getPeriod() {
         return period;
+    }
+
+    public String getSentence() {
+        return sentence;
     }
 
     public String getTimestamp() {
