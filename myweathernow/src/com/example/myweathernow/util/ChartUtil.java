@@ -38,6 +38,7 @@ public class ChartUtil {
     }
 
     private static void fillProbabilitiesChart(LineChart chart, List<WeatherInfo> details){
+        chart.animateXY(1000,1000);
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < details.size(); i++) {
             xVals.add((i) + "h");
@@ -64,12 +65,15 @@ public class ChartUtil {
 
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
+        chart.setYRange(0, 1, true);
         chart.getYLabels().setPosition(YLabels.YLabelPosition.LEFT);
         chart.setDrawYValues(false);
         chart.setData(data);
+        chart.refreshDrawableState();
     }
 
     private static void fillIntensitiesChart(LineChart chart, List<WeatherInfo> details){
+        chart.animateXY(1000,1000);
         ArrayList<String> xVals = new ArrayList<String>();
         for (int i = 0; i < details.size(); i++) {
             xVals.add((i) + "h");
@@ -93,8 +97,11 @@ public class ChartUtil {
 
         // create a data object with the datasets
         LineData data = new LineData(xVals, dataSets);
+        //chart.resetYRange(true);
         chart.getYLabels().setPosition(YLabels.YLabelPosition.RIGHT);
         chart.setDrawYValues(false);
+        chart.setDrawXLabels(false);
         chart.setData(data);
+        chart.refreshDrawableState();
     }
 }
