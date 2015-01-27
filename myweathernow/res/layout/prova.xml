@@ -64,7 +64,6 @@
                     android:layout_gravity="right"
                     android:textStyle="bold"
                     android:textColor="#ffffff"
-                    android:layout_marginTop="10dp"
                     android:layout_marginRight="20dp"
                     android:layout_weight="0.01"/>
             <TextView
@@ -81,10 +80,9 @@
             <ImageView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/imageView"
+                    android:id="@+id/umbrella_suggestion"
                     android:src="@drawable/open_umbrella_color"
-                    android:layout_weight="0.8"/>
-
+                    android:layout_weight="0.65"/>
             <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
@@ -97,54 +95,84 @@
                     android:textStyle="bold"
                     android:layout_weight="0.05"/>
             <LinearLayout
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="0.1"
+                    android:layout_height="0dp"
+                    android:layout_weight="0.3"
                     android:weightSum="1">
                 <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.5">
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#ff0c2c46"
+                        android:layout_weight="0.01">
                     <TextView
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/rain_probabiloty_title"
-                            android:id="@+id/probability_today_title"
+                            android:text="@string/today_info"
+                            android:id="@+id/today_info"
                             android:gravity="center"
-                            android:textStyle="bold"/>
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/rain_probabiloty_value"
-                            android:id="@+id/probability_today_value"
-                            android:gravity="center"
+                            android:layout_gravity="center"
                             android:textStyle="bold"/>
                 </LinearLayout>
                 <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="fill_parent"
-                        android:layout_weight="0.5">
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/rain_intensity_title"
-                            android:id="@+id/intensity_today_title"
-                            android:gravity="center"
-                            android:textStyle="bold"/>
-                    <TextView
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:text="@string/rain_intensity_value"
-                            android:id="@+id/intensity_today_value"
-                            android:gravity="center"
-                            android:textStyle="bold"/>
+                        android:orientation="horizontal"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.9"
+                        android:weightSum="1"
+                        android:background="#80FFFFFF">
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="2dp">
+                        <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:text="@string/rain_probabiloty_title"
+                                android:id="@+id/probability_today_title"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#FFFF00"/>
+                        <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:text="@string/rain_probabiloty_value"
+                                android:id="@+id/probability_today_value"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#FFFF00"/>
+                    </LinearLayout>
+                    <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="fill_parent"
+                            android:layout_weight="0.5"
+                            android:layout_marginTop="2dp">
+                        <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:text="@string/rain_intensity_title"
+                                android:id="@+id/intensity_today_title"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#FF0000"/>
+                        <TextView
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:text="@string/rain_intensity_value"
+                                android:id="@+id/intensity_today_value"
+                                android:gravity="center"
+                                android:textStyle="bold"
+                                android:textColor="#FF0000"/>
+                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -158,14 +186,13 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:weightSum="1"
                     android:background="#ff0c2c46">
                 <TextView
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="@string/details"
-                        android:id="@+id/morning_hour"
+                        android:id="@+id/details"
                         android:gravity="center"
                         android:layout_gravity="center"
                         android:textStyle="bold"/>
@@ -180,15 +207,17 @@
                         android:id="@+id/chartProbabilities"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginRight="18dp"
                         android:background="@android:color/transparent"
+                        android:layout_alignParentLeft="true"
                         />
                 <com.github.mikephil.charting.charts.LineChart
                         android:id="@+id/chartIntensities"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@android:color/transparent"
-                        android:layout_alignLeft="@id/chartProbabilities"
-                        android:layout_alignTop="@id/chartProbabilities"
+                        android:layout_marginLeft="18dp"
+                        android:layout_alignParentRight="true"
                         />
             </RelativeLayout>
 

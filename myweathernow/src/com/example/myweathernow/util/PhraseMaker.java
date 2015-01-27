@@ -24,7 +24,7 @@ public class PhraseMaker {
     private static String[] characters = new String[]{"m", "p", "s"};
 
     public static enum Slot {
-        NO_RAIN("Lascia l’omprello a casa, oggi sicuramente non piove!", "Lascia l’omprello a casa, oggi sicuramente non piove!"),
+        NO_RAIN("Lascia l’ombrello a casa, oggi sicuramente non piove!", "Lascia l’ombrello a casa, oggi sicuramente non piove!"),
         VERY_LOW("Lascia l’ombrello a casa, oggi non piove!", "Lascia l’ombrello a casa, oggi non piove!"),
         LOW("Non dovrebbe piovere, ma se XXX non vuoi rischiare portalo", "Oggi non dovrebbe piovere, ma se non vuoi rischiare portalo"),
         MEDIUM("Forse piove XXX, per sicurezza portarlo!", "Forse oggi piove, per sicurezza portarlo!"),

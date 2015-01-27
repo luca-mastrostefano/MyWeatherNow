@@ -11,6 +11,7 @@
     <string name="details">Dettagli</string>
     <string name="button_today">OGGI</string>
     <string name="button_tomorrow">DOMANI</string>
+    <string name="today_info">Oggi</string>
 
 
 </resources>
