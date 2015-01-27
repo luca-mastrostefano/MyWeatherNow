@@ -63,10 +63,28 @@ public class MWNhome extends Activity {
     public void refreshUI(WeatherManager weatherManager){
         Log.i("MWNhome", weatherManager.toString());
         Log.i("MWNhome", "Day: " + this.day);
+        //Set city and daye
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
-        List<WeatherInfo> details = weatherManager.getDetails(this.day);
 
+        //Set daily info
+        double daily_intensity = weatherManager.getOverview(this.day).get(WeatherInfo.Period.DAILY).getRainIntensity();
+        ((TextView) this.findViewById(R.id.intensity_today_value)).setText(daily_intensity + "");
+        double daily_probability = weatherManager.getOverview(this.day).get(WeatherInfo.Period.DAILY).getRainProbability();
+        ((TextView) this.findViewById(R.id.probability_today_value)).setText(daily_probability + "");
+
+        //Set sentence and image of the day
+        Map.Entry<PhraseMaker.Slot, String> suggestion = PhraseMaker.getPhrase(weatherManager, APIManager.Day.TODAY);
+        PhraseMaker.Slot phase = suggestion.getKey();
+        if(phase == PhraseMaker.Slot.NO_RAIN || phase == PhraseMaker.Slot.VERY_LOW){
+            ((ImageView) this.findViewById(R.id.imageView)).setImageResource(R.drawable.closed_umbrella_color);
+        }else{
+            ((ImageView) this.findViewById(R.id.imageView)).setImageResource(R.drawable.open_umbrella_color);
+        }
+        ((TextView) this.findViewById(R.id.rain_suggestion)).setText(suggestion.getValue());
+
+        //Refresh charts
+        List<WeatherInfo> details = weatherManager.getDetails(this.day);
         LineChart chartProbabilities = (LineChart) findViewById(R.id.chartProbabilities);
         ChartUtil.fill(chartProbabilities, details, true);
         LineChart chartIntensities = (LineChart) findViewById(R.id.chartIntensities);
