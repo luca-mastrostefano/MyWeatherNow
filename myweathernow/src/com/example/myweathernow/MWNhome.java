@@ -62,6 +62,7 @@ public class MWNhome extends Activity {
 
     public void refreshUI(WeatherManager weatherManager){
         Log.i("MWNhome", weatherManager.toString());
+        Log.i("MWNhome", "Day: " + this.day);
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
         List<WeatherInfo> details = weatherManager.getDetails(this.day);
