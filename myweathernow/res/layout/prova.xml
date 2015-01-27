@@ -170,18 +170,27 @@
                         android:layout_gravity="center"
                         android:textStyle="bold"/>
             </LinearLayout>
-            <LinearLayout
+            <RelativeLayout
                     android:orientation="horizontal"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#80FFFFFF">
                 <!-- https://github.com/PhilJay/MPAndroidChart -->
                 <com.github.mikephil.charting.charts.LineChart
-                        android:id="@+id/chart"
+                        android:id="@+id/chartProbabilities"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
                         />
-            </LinearLayout>
+                <com.github.mikephil.charting.charts.LineChart
+                        android:id="@+id/chartIntensities"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:layout_alignLeft="@id/chartProbabilities"
+                        android:layout_alignTop="@id/chartProbabilities"
+                        />
+            </RelativeLayout>
 
         </LinearLayout>
 

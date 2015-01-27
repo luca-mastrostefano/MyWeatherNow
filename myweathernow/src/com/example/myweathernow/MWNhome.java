@@ -51,6 +51,10 @@ public class MWNhome extends Activity {
         } catch (JSONException e) {
             //Cant get weatherInfo
         }
+        LineChart chartProbabilities = (LineChart) findViewById(R.id.chartProbabilities);
+        ChartUtil.initializeTransparentGraph(chartProbabilities);
+        LineChart chartIntensities = (LineChart) findViewById(R.id.chartIntensities);
+        ChartUtil.initializeTransparentGraph(chartIntensities);
         Log.d("MWNhome" , "calling external service to refresh UI");
         RefreshWeatherInfo refreshWeatherInfo = new RefreshWeatherInfo(this);
         refreshWeatherInfo.execute();
@@ -62,49 +66,10 @@ public class MWNhome extends Activity {
         ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
         List<WeatherInfo> details = weatherManager.getDetails(this.day);
 
-        LineChart chart = (LineChart) findViewById(R.id.chart);
-        chart.animateXY(1000,1000);
-        Log.d("MWNhome-refreshUI" , "iterating " + details.size() + " weatherInfo");
-        ArrayList<String> xVals = new ArrayList<String>();
-        for (int i = 0; i < details.size(); i++) {
-            xVals.add((i) + "");
-        }
-        ArrayList<Entry> probabilities = new ArrayList<Entry>();
-        for (int i = 0; i < details.size(); i++) {
-            WeatherInfo weatherInfo = details.get(i);
-            probabilities.add(new Entry((float)weatherInfo.getRainProbability(), i));
-        }
-        // create a dataset and give it a type
-        LineDataSet set1 = new LineDataSet(probabilities, "DataSet 1");
-        set1.setColor(ColorTemplate.getHoloBlue());
-        set1.setCircleColor(ColorTemplate.getHoloBlue());
-        set1.setLineWidth(2f);
-        set1.setCircleSize(4f);
-        set1.setFillAlpha(65);
-        set1.setFillColor(ColorTemplate.getHoloBlue());
-        set1.setHighLightColor(Color.rgb(244, 117, 117));
-
-        ArrayList<Entry> intensities = new ArrayList<Entry>();
-        for (int i = 0; i < details.size(); i++) {
-            WeatherInfo weatherInfo = details.get(i);
-            intensities.add(new Entry((float)weatherInfo.getRainIntensity(), i));
-        }
-        // create a dataset and give it a type
-        LineDataSet set2 = new LineDataSet(intensities, "DataSet 1");
-        set2.setColor(Color.parseColor("red"));
-        set2.setCircleColor(Color.parseColor("red"));
-        set2.setLineWidth(2f);
-        set2.setCircleSize(4f);
-        set2.setFillAlpha(65);
-        set2.setFillColor(ColorTemplate.getHoloBlue());
-        set2.setHighLightColor(Color.rgb(244, 117, 117));
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(set1); // add the datasets
-        dataSets.add(set2); // add the datasets
-
-        // create a data object with the datasets
-        LineData data = new LineData(xVals, dataSets);
-        chart.setData(data);
+        LineChart chartProbabilities = (LineChart) findViewById(R.id.chartProbabilities);
+        ChartUtil.fill(chartProbabilities, details, true);
+        LineChart chartIntensities = (LineChart) findViewById(R.id.chartIntensities);
+        ChartUtil.fill(chartIntensities, details, false);
         //TODO bla bla bla with details
     }
 
