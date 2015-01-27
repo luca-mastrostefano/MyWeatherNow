@@ -257,8 +257,8 @@ class Forecast
             foreach( $response['hourly']['data'] as $hourData){
                 $result['detailed'][] = array(
                     'timestamp'     => $hourData['time'],
-                    'rainProb'      => rand(1,10)/10 + round( $hourData['precipProbability'], 2 ),
-                    'rainIntensity' => rand(1,10)/10 + round( $hourData['precipIntensity'],   4 ),
+                    'rainProb'      => round( $hourData['precipProbability'], 2 ),
+                    'rainIntensity' => round( $hourData['precipIntensity'],   4 ),
                     'period'        => $this->fromTime2period($hourData['time']),
                 );
             }
