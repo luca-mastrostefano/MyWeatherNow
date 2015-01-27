@@ -61,11 +61,11 @@ public class PhraseMaker {
         double dailyProbability = periodToInfo.get(WeatherInfo.Period.DAILY).getRainProbability();
         // controllo prima la probabilità del giorno
         Slot slot = Slot.fromDoubleToSlot(dailyProbability);
-        String stringToRetunr = "";
+        String description = "";
         switch (slot) {
             case NO_RAIN:
             case VERY_LOW:
-                stringToRetunr = slot.phrase;
+                description = slot.phrase;
                 break;
             case LOW:
             case MEDIUM:
@@ -77,13 +77,16 @@ public class PhraseMaker {
                 double[] probabilities = new double[]{morningProbability, afternoonProbability, eveningProbability};
                 String rainingPhase = getRainingPhase(probabilities);
                 if (rainingPhase.equals("mps")) {
-                    stringToRetunr = slot.phraseDay;
+                    description = slot.phraseDay;
                 } else {
-                    stringToRetunr = slot.phrase.replace("XXX", phaseToSentence.get(rainingPhase));
+                    description = slot.phrase.replace("XXX", phaseToSentence.get(rainingPhase));
                 }
                 break;
         }
-        return new AbstractMap.SimpleImmutableEntry<Slot, String>(slot,stringToRetunr);
+        if(APIManager.Day.TOMORROW.equals(day)){
+            description = description.replaceAll("oggi", "domani").replaceAll("Oggi", "Domani");
+        }
+        return new AbstractMap.SimpleImmutableEntry<Slot, String>(slot,description);
     }
 
     private static String getRainingPhase(double[] probabilities) {

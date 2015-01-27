@@ -65,7 +65,7 @@ public class MWNhome extends Activity {
         Log.i("MWNhome", "Day: " + this.day);
         //Set city and daye
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
-        ((TextView) this.findViewById(R.id.date)).setText(dateFormatter.format(weatherManager.getDate()));
+        ((TextView) this.findViewById(R.id.date)).setText(this.normalizeDate(dateFormatter.format(weatherManager.getDate())));
 
         //Set daily info
         double daily_intensity = weatherManager.getOverview(this.day).get(WeatherInfo.Period.DAILY).getRainIntensity();
@@ -74,12 +74,12 @@ public class MWNhome extends Activity {
         ((TextView) this.findViewById(R.id.probability_today_value)).setText(daily_probability + "");
 
         //Set sentence and image of the day
-        Map.Entry<PhraseMaker.Slot, String> suggestion = PhraseMaker.getPhrase(weatherManager, APIManager.Day.TODAY);
+        Map.Entry<PhraseMaker.Slot, String> suggestion = PhraseMaker.getPhrase(weatherManager, this.day);
         PhraseMaker.Slot phase = suggestion.getKey();
         if(phase == PhraseMaker.Slot.NO_RAIN || phase == PhraseMaker.Slot.VERY_LOW){
-            ((ImageView) this.findViewById(R.id.imageView)).setImageResource(R.drawable.closed_umbrella_color);
+            ((ImageView) this.findViewById(R.id.umbrella_suggestion)).setImageResource(R.drawable.closed_umbrella_color);
         }else{
-            ((ImageView) this.findViewById(R.id.imageView)).setImageResource(R.drawable.open_umbrella_color);
+            ((ImageView) this.findViewById(R.id.umbrella_suggestion)).setImageResource(R.drawable.open_umbrella_color);
         }
         ((TextView) this.findViewById(R.id.rain_suggestion)).setText(suggestion.getValue());
 
@@ -90,6 +90,16 @@ public class MWNhome extends Activity {
         LineChart chartIntensities = (LineChart) findViewById(R.id.chartIntensities);
         ChartUtil.fill(chartIntensities, details, false);
         //TODO bla bla bla with details
+    }
+
+    private String normalizeDate(String date){
+        StringBuilder b = new StringBuilder(date);
+        int i = 0;
+        do {
+            b.replace(i, i + 1, b.substring(i,i + 1).toUpperCase());
+            i =  b.indexOf(" ", i) + 1;
+        } while (i > 0 && i < b.length());
+        return b.toString();
     }
 
     private boolean isFirstStart(){
