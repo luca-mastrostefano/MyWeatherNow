@@ -65,21 +65,29 @@ public class UmbrellAppHome extends Activity {
         Log.i("MWNhome", "Day: " + this.day);
         //Set city and daye
         ((TextView) this.findViewById(R.id.city)).setText("Roma");
-        ((TextView) this.findViewById(R.id.date)).setText(this.normalizeDate(dateFormatter.format(weatherManager.getDate())));
+        String date;
+        if(APIManager.Day.TODAY.equals(this.day)){
+            date = this.normalizeDate(dateFormatter.format(weatherManager.getDate()));
+        }else{
+            date = this.normalizeDate(dateFormatter.format(new Date(weatherManager.getDate().getTime() + (1000 * 60 * 60 * 24))));
+        }
+        ((TextView) this.findViewById(R.id.date)).setText(date);
 
         //Set daily info
         double daily_intensity = weatherManager.getOverview(this.day).get(WeatherInfo.Period.DAILY).getRainIntensity();
-        ((TextView) this.findViewById(R.id.intensity_today_value)).setText(daily_intensity + "");
+        ((TextView) this.findViewById(R.id.intensity_today_value)).setText(daily_intensity + "mm");
         double daily_probability = weatherManager.getOverview(this.day).get(WeatherInfo.Period.DAILY).getRainProbability();
-        ((TextView) this.findViewById(R.id.probability_today_value)).setText(daily_probability + "");
+        ((TextView) this.findViewById(R.id.probability_today_value)).setText(daily_probability*100 + "%");
 
         //Set sentence and image of the day
         Map.Entry<PhraseMaker.Slot, String> suggestion = PhraseMaker.getPhrase(weatherManager, this.day);
         PhraseMaker.Slot phase = suggestion.getKey();
         if(phase == PhraseMaker.Slot.NO_RAIN || phase == PhraseMaker.Slot.VERY_LOW){
             ((ImageView) this.findViewById(R.id.umbrella_suggestion)).setImageResource(R.drawable.closed_umbrella_color);
+            ((ImageView) this.findViewById(R.id.background)).setImageResource(R.drawable.sky);
         }else{
             ((ImageView) this.findViewById(R.id.umbrella_suggestion)).setImageResource(R.drawable.open_umbrella_color);
+            ((ImageView) this.findViewById(R.id.background)).setImageResource(R.drawable.rainy_day);
         }
         ((TextView) this.findViewById(R.id.rain_suggestion)).setText(suggestion.getValue());
 

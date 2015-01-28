@@ -13,6 +13,7 @@ import android.widget.*;
 public class LocationService extends Service {
     public LocationManager locationManager;
     public MyLocationListener listener;
+    public static final int INTERVAL = 1000*60*10;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -20,7 +21,7 @@ public class LocationService extends Service {
         Log.i("Thread Service 1", ""  + Thread.currentThread().getId());
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         listener = new MyLocationListener(this);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, listener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, INTERVAL, 0, listener);
         return START_STICKY;
     }
 
